@@ -6,7 +6,7 @@ import { AuthModel } from '../models/auth.model';
 import { AuthHTTPService } from './auth-http';
 import { environment } from 'src/environments/environment';
 import { Router } from '@angular/router';
-import { UserRegistrationModel, LoginRequest, User, ApiClientService, NotificationService } from 'src/app/shared';
+import { UserRegistrationModel, LoginRequest, User, ApiClientService, NotificationService, UserDataStoreService, UserStore } from 'src/app/shared';
 
 export type UserType = User | undefined;
 
@@ -34,7 +34,8 @@ export class AuthService implements OnDestroy {
 
   constructor(
     private authHttpService: AuthHTTPService,
-    private router: Router
+    private router: Router,
+    private userDataStoreService: UserDataStoreService
   ) {
     this.isLoadingSubject = new BehaviorSubject<boolean>(false);
     this.currentUserSubject = new BehaviorSubject<UserType>(undefined);
@@ -67,6 +68,7 @@ export class AuthService implements OnDestroy {
 
   logout() {
     localStorage.removeItem(this.authLocalStorageToken);
+    this.userDataStoreService.remove();
     this.router.navigate(['/auth/login'], {
       queryParams: {},
     });
@@ -83,6 +85,7 @@ export class AuthService implements OnDestroy {
     return this.authHttpService.getUserByToken(auth.authToken).pipe(
       map((user: User | undefined) => {
         if (user) {
+          this.userDataStoreService.create(user);
           this.currentUserSubject.next(user);
         } else {
           this.logout();

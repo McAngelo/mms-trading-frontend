@@ -42,7 +42,8 @@ export interface UserStore {
   roles?: RoleStore[];
   portfolios?: PortfolioStore[];
   wallet?: WalletStore[];
-  TotalOrders?:any;
+  availableStocks?: any;
+  totalOrders?:any;
   createdDate?: string;
   lastModifiedDate?: string;
   name?: string;
