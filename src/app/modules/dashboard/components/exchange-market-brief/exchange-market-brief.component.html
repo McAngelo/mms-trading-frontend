@@ -61,11 +61,11 @@
               <td>
                 <span class="text-gray-900 fw-bolder text-hover-primary d-block mb-1 fs-6"
                 >
-                $ {{ marketBrief.avgBuy | number : '1.2-2' }}
+                $ {{ marketBrief.bidPrice | number : '1.2-2' }}
                 </span>
               </td>
               <td>
-                  <span class="text-gray-900 fw-bolder text-hover-primary d-block mb-1 fs-6">$ {{ marketBrief.avgSell | number : '1.2-2' }} </span>
+                  <span class="text-gray-900 fw-bolder text-hover-primary d-block mb-1 fs-6">$ {{ marketBrief.askPrice | number : '1.2-2' }} </span>
               </td>
               <td>
                   <span class="text-gray-900 fw-bolder text-hover-primary d-block mb-1 fs-6">$ {{ marketBrief.maxPriceShift | number : '1.2-2' }}</span

@@ -43,7 +43,6 @@ export class WalletComponent implements OnInit{
       this.userData = data;
       console.log(this.userData);
       this.walletBalance = (data?.wallet)? data.wallet[0]?.balance : 0 ;
-      //this.walletId = (data?.wallet)? data.wallet[0]?.id?.toString() : '0' ;
       this.walletId = (data?.wallet && data.wallet[0]?.id !== undefined) 
                       ? data.wallet[0]?.id.toString() 
                       : '0';
