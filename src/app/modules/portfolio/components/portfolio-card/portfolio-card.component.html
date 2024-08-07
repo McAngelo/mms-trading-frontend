@@ -44,8 +44,13 @@
           mb-3
         "
       >
-        <div class="fs-6 text-gray-800 fw-bolder">{{ date }}</div>
-        <div class="fw-bold text-gray-500">Due Date</div>
+        <div class="fs-6 text-gray-800 fw-bolder">{{ profit }}</div>
+        <div class="fw-bold text-gray-500">
+          <span class="badge badge-light-success fs-base">
+            <app-keenicon name="arrow-up" class="fs-5 text-success ms-n1"></app-keenicon>
+            {{ profitPercent }}% profit
+          </span>
+        </div>
       </div>
 
       <div
@@ -58,8 +63,13 @@
           mb-3
         "
       >
-        <div class="fs-6 text-gray-800 fw-bolder">{{ budget }}</div>
-        <div class="fw-bold text-gray-500">Budget</div>
+        <div class="fs-6 text-gray-800 fw-bolder">{{ loss }}</div>
+        <div class="fw-bold text-gray-500">
+          <span class="badge badge-light-danger fs-base">
+            <app-keenicon name="arrow-down" class="fs-5 text-danger ms-n1"></app-keenicon>
+            {{ lossPercent }}% loss
+          </span>
+        </div>
       </div>
     </div>
 

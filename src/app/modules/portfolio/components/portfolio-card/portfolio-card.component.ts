@@ -19,8 +19,10 @@ export class PortfolioCardComponent {
   @Input() statusColor: string = '';
   @Input() title: string = '';
   @Input() description: string = '';
-  @Input() date: string = '';
-  @Input() budget: string = '';
+  @Input() profit: string = '';
+  @Input() profitPercent: string = '';
+  @Input() loss: string = '';
+  @Input() lossPercent: string = '';
   @Input() progress: number = 50;
   @Input() users: Array<IconUserModel> = [];
 
