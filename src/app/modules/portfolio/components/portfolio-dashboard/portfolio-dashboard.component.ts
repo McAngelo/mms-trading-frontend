@@ -98,6 +98,38 @@ export class PortfolioDashboardComponent implements OnInit{
     );
   }
 
+  public  async getAllPorfolio(uniqueCode: any): Promise<void> {
+    /* (await this._apiClientService.readOneApiService('v1/location-contact', uniqueCode)).subscribe((event: HttpEvent<any>) => {
+      switch (event.type) {
+        case HttpEventType.Sent:
+          this.loading = true;
+          break;
+        case HttpEventType.Response:
+          let { status, message, data, error} = event.body;
+          this.loading = false;
+          if (status == 200) {
+            //(data);
+
+            this.selectDistricts({ value: data.region });
+            const dataObj: LocationObject = {
+              applicationUniqueCode: data.applicationUniqueCode,
+              region: data.region,
+              district: data.district,
+              locality: data.locality,
+              locationType: data.locationType,
+            };
+            this._applicationStoreService.update('location', dataObj);
+            this.updateLocationStatus = true;
+            this.loading = false;
+          }
+      }
+    }, (error) => {
+      this.loading = false;
+      this.updateLocationStatus = false;
+      return false;
+    }); */
+  }
+
   async closeModal(){
     return await this.modalComponent.close();
   }

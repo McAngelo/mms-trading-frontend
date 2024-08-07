@@ -4,7 +4,8 @@ import {
   OnInit, 
   ElementRef,
   Input,
-  ViewChild 
+  ViewChild ,
+  ViewEncapsulation
 } from "@angular/core";
 
 import {
@@ -15,6 +16,8 @@ import {
   ApexXAxis,
   ApexTitleSubtitle
 } from "ng-apexcharts";
+
+import { CandleService } from 'src/app/shared';
 
 import * as ApexCharts from 'apexcharts';
 
@@ -29,7 +32,8 @@ export type ChartOptions = {
 @Component({
   selector: 'app-candle-stick-charts',
   templateUrl: './candle-stick-charts.component.html',
-  styleUrl: './candle-stick-charts.component.scss'
+  styleUrl: './candle-stick-charts.component.scss',
+  encapsulation: ViewEncapsulation.None
 })
 export class CandleStickChartsComponent  implements OnInit {
 
@@ -48,7 +52,7 @@ export class CandleStickChartsComponent  implements OnInit {
 
   
 
-  constructor(private cdr: ChangeDetectorRef) {}
+  constructor(private cdr: ChangeDetectorRef, private _candleService: CandleService) {}
 
   ngOnInit(): void {
     this.setupCharts();
@@ -63,7 +67,12 @@ export class CandleStickChartsComponent  implements OnInit {
   }
 
   init() {
-    this.chartOptions = {
+    this._candleService.chartOptions$.subscribe(options => {
+      this.chartOptions = options;
+      this.cdr.detectChanges();
+      console.log("This is a generated value: ", this.chartOptions);
+    });
+    /* this.chartOptions = {
       series: [
         {
           name: "candle",
@@ -327,7 +336,7 @@ export class CandleStickChartsComponent  implements OnInit {
           enabled: true
         }
       }
-    };
+    }; */
   }
 
   public generateDayWiseTimeSeries(baseval:any, count:any, yrange:any) {

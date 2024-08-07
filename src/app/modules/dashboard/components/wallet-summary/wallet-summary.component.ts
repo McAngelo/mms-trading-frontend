@@ -17,10 +17,9 @@ export class WalletSummaryComponent implements OnInit {
   public availableStocks: number;
   public totalOrders: number;
 
-  constructor(cd: ChangeDetectorRef, private _userDataStoreService: UserDataStoreService) {}
+  constructor(private cdr: ChangeDetectorRef, private _userDataStoreService: UserDataStoreService) {}
 
   ngOnInit(): void {
-    //this._userDataStoreService.readAll();
     this.userObj$ = this._userDataStoreService.userData;
 
     this.objSubscription = this.userObj$.subscribe((data: UserStore | undefined) => {
@@ -29,6 +28,7 @@ export class WalletSummaryComponent implements OnInit {
       this.totalPortfolio = (data?.portfolios)? data.portfolios.length : 0;
       this.availableStocks = data?.availableStocks || 0;
       this.totalOrders = data?.totalOrders || 0;
+      this.cdr.detectChanges();
     });
   }
 

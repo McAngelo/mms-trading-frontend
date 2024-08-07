@@ -1,4 +1,4 @@
-import { Component, ViewChild, OnInit, OnDestroy } from '@angular/core';
+import { Component, ViewChild, OnInit, OnDestroy, ChangeDetectorRef, } from '@angular/core';
 import { ModalConfig, ModalComponent } from '../../../../_metronic/partials';
 import { DashboardStoreService, ExchangeData } from 'src/app/shared';
 import { data } from 'jquery';
@@ -220,7 +220,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
   private webSocket: WebSocket;
   myStock: ExchangeData = {};
 
-  constructor(private _dashboardStoreService: DashboardStoreService) {
+  constructor(private cdr: ChangeDetectorRef, private _dashboardStoreService: DashboardStoreService) {
     this.webSocket = new WebSocket('ws://localhost:8082/market-stocks');
     //this.webSocket = new WebSocket('ws://localhost:8080/stocks');
     console.log(this.webSocket);
@@ -233,13 +233,8 @@ export class DashboardComponent implements OnInit, OnDestroy {
       }else{
         this._dashboardStoreService.update("exchangeData", this.myStock);
       }
-      
 
-      //this.exchangeOneMarketBrief = this.updateExchangeMarketBrief(this.myStock.EXCHANGE1, this.exchangeMarketBrief)
-
-      //console.log("MARKET DATA ", this.exchangeOneMarketBrief);
-      
-      
+      this.cdr.detectChanges();
     };
   }
 

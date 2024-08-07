@@ -14,6 +14,7 @@ export * from './services/login.service';
 export * from './services/notification.service';
 export * from './services/autologout.service';
 export * from './services/table-util.service';
+export * from './services/candle.service';
 
 export * from './stores/application-store.service';
 export * from './stores/dashboard-store.service';
