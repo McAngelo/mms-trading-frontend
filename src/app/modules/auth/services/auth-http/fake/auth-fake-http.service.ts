@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+/* import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
 import { map } from 'rxjs/operators';
@@ -85,3 +85,4 @@ export class AuthHTTPService {
     return this.http.get<UserModel[]>(API_USERS_URL);
   }
 }
+ */

@@ -22,6 +22,7 @@ export class AuthService {
   public headers: any = new HttpHeaders();
   public token: string = '';
   public loggedUser?:User;
+  isLoading$: Observable<boolean>;
   private readonly JWT_TOKEN: string = 'JWT_TOKEN';
   private isAuthenticatedSubject = new BehaviorSubject<boolean>(false);
 
@@ -68,6 +69,7 @@ export class AuthService {
     this.loggedUser = user;
     this.storeJwtToken(token);
     if(user.enabled == true){
+      this._router.navigate(['/dashboard']);
       const userObj:string = JSON.stringify(user);
       sessionStorage.setItem('userObj', userObj);
       this.isAuthenticatedSubject.next(true);

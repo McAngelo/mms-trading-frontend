@@ -1,10 +1,10 @@
-import { Component, OnInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Subscription, Observable } from 'rxjs';
 import { first } from 'rxjs/operators';
-import { UserModel } from '../../models/user.model';
 import { AuthService } from '../../services/auth.service';
 import { ActivatedRoute, Router } from '@angular/router';
+import { LoginRequest, User } from 'src/app/shared';
 
 @Component({
   selector: 'app-login',
@@ -14,8 +14,8 @@ import { ActivatedRoute, Router } from '@angular/router';
 export class LoginComponent implements OnInit, OnDestroy {
   // KeenThemes mock, change it to:
   defaultAuth: any = {
-    email: 'test@mms.com',
-    password: '1234',
+    email: '',//'test@mms.com',
+    password: ''///'1234',
   };
   loginForm: FormGroup;
   hasError: boolean;
@@ -35,7 +35,7 @@ export class LoginComponent implements OnInit, OnDestroy {
     // redirect to home if already logged in
     if (this.authService.currentUserValue) {
       this.router.navigate(['/']);
-    }
+    } 
   }
 
   ngOnInit(): void {
@@ -43,6 +43,8 @@ export class LoginComponent implements OnInit, OnDestroy {
     // get return url from route parameters or default to '/'
     this.returnUrl =
       this.route.snapshot.queryParams['returnUrl'.toString()] || '/';
+
+      console.log(this.returnUrl);
   }
 
   // convenience getter for easy access to form fields
@@ -74,10 +76,14 @@ export class LoginComponent implements OnInit, OnDestroy {
 
   submit() {
     this.hasError = false;
+    const loginReq:LoginRequest = {
+      email: this.f.email.value,
+      password: this.f.password.value
+    };
     const loginSubscr = this.authService
-      .login(this.f.email.value, this.f.password.value)
+      .login(loginReq)
       .pipe(first())
-      .subscribe((user: UserModel | undefined) => {
+      .subscribe((user: User | undefined) => {
         if (user) {
           this.router.navigate([this.returnUrl]);
         } else {

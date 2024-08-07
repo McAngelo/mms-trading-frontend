@@ -3,8 +3,8 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { HttpEventType, HttpEvent } from "@angular/common/http";
 import { Subscription, Observable } from 'rxjs';
 import { Router } from '@angular/router';
-//import { AuthService } from '../../services/auth.service';
-import { userRegistrationModel, AuthService, LoginRequest, ApiClientService, NotificationService } from 'src/app/shared';
+import { AuthService } from '../../services/auth.service';
+import { UserRegistrationModel, User, ApiClientService, NotificationService } from 'src/app/shared';
 import { ConfirmPasswordValidator } from './confirm-password.validator';
 import { UserModel } from '../../models/user.model';
 import { first } from 'rxjs/operators';
@@ -31,9 +31,9 @@ export class RegistrationComponent implements OnInit, OnDestroy {
     private _apiClientService: ApiClientService,
     private _notificationService: NotificationService
   ) {
-    /* this.isLoading$ = this.authService.isLoading$;
+   this.isLoading$ = this.authService.isLoading$;
     // redirect to home if already logged in
-    if (this.authService.currentUserValue) {
+     /* if (this.authService.currentUserValue) {
       this.router.navigate(['/']);
     } */
   }
@@ -91,7 +91,7 @@ export class RegistrationComponent implements OnInit, OnDestroy {
     );
   }
 
- /*  submit() {
+ submit() {
     this.hasError = false;
     const result: {
       [key: string]: string;
@@ -101,10 +101,25 @@ export class RegistrationComponent implements OnInit, OnDestroy {
     });
     const newUser = new UserModel();
     newUser.setUser(result);
+
+    console.log(result);
+    const checkPass:boolean = (result.password === result.cPassword)? true:false;
+
+    const userData:UserRegistrationModel = {};
+
+    if(checkPass && result.agree){
+      userData.fullName = result.fullname;
+      userData.email = result.email;
+      userData.password = result.password;
+    }else{
+      return;
+    }
+
     const registrationSubscr = this.authService
-      .registration(newUser)
+      .registration(userData)
       .pipe(first())
-      .subscribe((user: UserModel) => {
+      .subscribe((user: User) => {
+        this._notificationService.showSuccess('Successful registration', 'Success');
         if (user) {
           this.router.navigate(['/']);
         } else {
@@ -112,9 +127,9 @@ export class RegistrationComponent implements OnInit, OnDestroy {
         }
       });
     this.unsubscribe.push(registrationSubscr);
-  } */
+  }
 
-  onSubmit(){
+  /* onSubmit(){
 
     this.hasError = false;
     const result: {
@@ -139,9 +154,9 @@ export class RegistrationComponent implements OnInit, OnDestroy {
       this.createUser(userData);
     }
 
-  }
+  } */
 
-  public async createUser( userData:userRegistrationModel){
+  /* public async createUser( userData:userRegistrationModel){
     this.processing = true;
     const loginReq:LoginRequest = {
       email: userData.email,
@@ -176,7 +191,7 @@ export class RegistrationComponent implements OnInit, OnDestroy {
       }
     );
 
-  }
+  } */
 
  /*  public async updateCompany(): Promise<void> {
     this.model.status = parseInt(this.model.status);

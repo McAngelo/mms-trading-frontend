@@ -6,8 +6,9 @@ import { AuthModel } from '../models/auth.model';
 import { AuthHTTPService } from './auth-http';
 import { environment } from 'src/environments/environment';
 import { Router } from '@angular/router';
+import { UserRegistrationModel, LoginRequest, User, ApiClientService, NotificationService } from 'src/app/shared';
 
-export type UserType = UserModel | undefined;
+export type UserType = User | undefined;
 
 @Injectable({
   providedIn: 'root',
@@ -44,11 +45,15 @@ export class AuthService implements OnDestroy {
   }
 
   // public methods
-  login(email: string, password: string): Observable<UserType> {
+  login(loginReq:LoginRequest): Observable<UserType> {
     this.isLoadingSubject.next(true);
-    return this.authHttpService.login(email, password).pipe(
-      map((auth: AuthModel) => {
-        const result = this.setAuthFromLocalStorage(auth);
+    return this.authHttpService.login(loginReq).pipe(
+      map((auth: any) => {
+        const authData: any = {
+          authToken:auth.data.token,
+          userData: auth.data.user
+        };
+        const result = this.setAuthFromLocalStorage(authData);
         return result;
       }),
       switchMap(() => this.getUserByToken()),
@@ -67,15 +72,16 @@ export class AuthService implements OnDestroy {
     });
   }
 
-  getUserByToken(): Observable<UserType> {
+  getUserByToken(): Observable<any> {
     const auth = this.getAuthFromLocalStorage();
     if (!auth || !auth.authToken) {
       return of(undefined);
     }
 
     this.isLoadingSubject.next(true);
+
     return this.authHttpService.getUserByToken(auth.authToken).pipe(
-      map((user: UserType) => {
+      map((user: User | undefined) => {
         if (user) {
           this.currentUserSubject.next(user);
         } else {
@@ -88,13 +94,17 @@ export class AuthService implements OnDestroy {
   }
 
   // need create new user then login
-  registration(user: UserModel): Observable<any> {
+  registration(user: UserRegistrationModel): Observable<any> {
+    const loginReq:any = {
+      email: user.email,
+      password: user.password
+    };
     this.isLoadingSubject.next(true);
     return this.authHttpService.createUser(user).pipe(
       map(() => {
         this.isLoadingSubject.next(false);
       }),
-      switchMap(() => this.login(user.email, user.password)),
+      switchMap(() => this.login(loginReq)),
       catchError((err) => {
         console.error('err', err);
         return of(undefined);

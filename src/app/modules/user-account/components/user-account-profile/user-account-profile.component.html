@@ -47,7 +47,7 @@
                     cursor-pointer
                   "
                 >
-                {{ _user.firstname }} {{ _user.lastname }}
+                {{ _user.fullName }}
                 </a>
                 <a class="cursor-pointer">
                   <app-keenicon name="verify" class="fs-1 text-primary"></app-keenicon>
@@ -81,7 +81,7 @@
                   "
                 >
                   <app-keenicon name="profile-circle" class="fs-4 me-1"></app-keenicon>
-                  {{ _user.roleName }}
+                  {{ _user.roles[0].name }}
                 </a>
                 <a
                   class="

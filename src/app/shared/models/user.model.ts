@@ -11,7 +11,7 @@
     verified: string;
 } */
 
-export interface userRegistrationModel {
+export interface UserRegistrationModel {
   fullName?: string;
   email?: string;
   password?: string;

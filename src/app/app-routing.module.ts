@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { AuthGuard } from './modules/auth/services/auth.guard';
-
+import { authGuard } from 'src/app/shared';
 export const routes: Routes = [
   {
     path: 'auth',
