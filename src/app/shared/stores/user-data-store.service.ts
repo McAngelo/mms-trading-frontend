@@ -34,7 +34,7 @@ export interface WalletStore {
 }
 
 export interface UserStore {
-  id?: number;
+  userId?: number;
   fullName?: string;
   email?: string;
   accountLocked?: boolean;

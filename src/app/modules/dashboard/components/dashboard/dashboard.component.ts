@@ -1,6 +1,6 @@
 import { Component, ViewChild, OnInit, OnDestroy } from '@angular/core';
 import { ModalConfig, ModalComponent } from '../../../../_metronic/partials';
-import { DashboardStoreService, ExchangeData } from '../../../../shared';
+import { DashboardStoreService, ExchangeData } from 'src/app/shared';
 import { data } from 'jquery';
 
 @Component({
@@ -228,11 +228,11 @@ export class DashboardComponent implements OnInit, OnDestroy {
       this.myStock = JSON.parse(event.data);
       console.log(this.myStock);
       let checkStore = JSON.parse(sessionStorage.getItem('exchangeData') || '{}');
-      /* if(Object.keys(checkStore).length === 0){
+      if(Object.keys(checkStore).length === 0){
         this._dashboardStoreService.create(this.myStock);
       }else{
         this._dashboardStoreService.update("exchangeData", this.myStock);
-      } */
+      }
       
 
       //this.exchangeOneMarketBrief = this.updateExchangeMarketBrief(this.myStock.EXCHANGE1, this.exchangeMarketBrief)

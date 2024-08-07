@@ -1,1 +1,101 @@
-<p>step2 works!</p>
+<div class="pb-10 pb-lg-15">
+    <h2 class="fw-bolder text-gray-900">Fund Wallet</h2>
+    <div class="text-gray-500 fw-bold fs-6">
+      Select any amount to fund your opening wallet
+      <!-- <a href="#" class="link-primary fw-bolder"> Help Page</a>. -->
+    </div>
+  </div>
+  <div [formGroup]="form">
+    <div class="mb-0 fv-row">
+      <label class="d-flex align-items-center form-label mb-5">
+        Select Account Plan<i
+        class="fas fa-exclamation-circle ms-2 fs-7"
+        ngbTooltip="Monthly billing will be based on your account plan">
+  
+      </i>
+      </label>
+      <div class="mb-0">
+        <label class="d-flex flex-stack mb-5 cursor-pointer">
+          <span class="d-flex align-items-center me-2">
+            <span class="symbol symbol-50px me-6">
+              <span class="symbol-label">
+                <app-keenicon name="credit-cart" class="fs-1"></app-keenicon>
+              </span>
+            </span>
+            <span class="d-flex flex-column">
+              <span class="fw-bolder text-gray-800 text-hover-primary fs-5">
+                $ 1,000.00
+              </span>
+            </span>
+          </span>
+          <span class="form-check form-check-custom form-check-solid">
+            <input
+              formControlName="fundWallet"
+              class="form-check-input"
+              type="radio"
+              value="1000"/></span>
+        </label>
+        <label class="d-flex flex-stack mb-5 cursor-pointer">
+          <span class="d-flex align-items-center me-2">
+            <span class="symbol symbol-50px me-6">
+              <span class="symbol-label">
+                <app-keenicon name="credit-cart" class="fs-1"></app-keenicon>
+              </span>
+            </span>
+            <span class="d-flex flex-column">
+              <span class="fw-bolder text-gray-800 text-hover-primary fs-5">
+                $ 10,000.00
+              </span>
+            </span>
+          </span>
+          <span class="form-check form-check-custom form-check-solid">
+            <input
+              formControlName="fundWallet"
+              class="form-check-input"
+              type="radio"
+              value="10000"/></span>
+        </label>
+        <label class="d-flex flex-stack mb-5 cursor-pointer">
+          <span class="d-flex align-items-center me-2">
+            <span class="symbol symbol-50px me-6">
+              <span class="symbol-label">
+                <app-keenicon name="credit-cart" class="fs-1"></app-keenicon>
+              </span>
+            </span>
+            <span class="d-flex flex-column">
+              <span class="fw-bolder text-gray-800 text-hover-primary fs-5">
+                $ 100,000.00
+              </span>
+            </span>
+          </span>
+          <span class="form-check form-check-custom form-check-solid">
+            <input
+              formControlName="fundWallet"
+              class="form-check-input"
+              type="radio"
+              value="100000"/></span>
+        </label>
+        <label class="d-flex flex-stack mb-0 cursor-pointer">
+          <span class="d-flex align-items-center me-2">
+            <span class="symbol symbol-50px me-6">
+              <span class="symbol-label">
+                <app-keenicon name="credit-cart" class="fs-1"></app-keenicon>
+              </span>
+            </span>
+            <span class="d-flex flex-column">
+              <span class="fw-bolder text-gray-800 text-hover-primary fs-5">
+                $ 1,000,000.00
+              </span>
+            </span>
+          </span>
+          <span class="form-check form-check-custom form-check-solid">
+            <input
+              formControlName="fundWallet"
+              class="form-check-input"
+              type="radio"
+              value="1000000"/></span>
+        </label>
+      </div>
+    </div>
+  </div>
+  

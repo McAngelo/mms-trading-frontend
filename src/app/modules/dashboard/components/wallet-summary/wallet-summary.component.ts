@@ -1,6 +1,6 @@
-import { Component, Input, OnInit  } from '@angular/core';
+import { ChangeDetectorRef, Component, Input, OnInit  } from '@angular/core';
 import { UserDataStoreService, UserStore } from 'src/app/shared';
-import { Observable, Subscription } from 'rxjs';
+import { Observable, Subscription, of } from 'rxjs';
 @Component({
   selector: 'app-wallet-summary',
   templateUrl: './wallet-summary.component.html',
@@ -17,7 +17,7 @@ export class WalletSummaryComponent implements OnInit {
   public availableStocks: number;
   public totalOrders: number;
 
-  constructor(private _userDataStoreService: UserDataStoreService) {}
+  constructor(cd: ChangeDetectorRef, private _userDataStoreService: UserDataStoreService) {}
 
   ngOnInit(): void {
     //this._userDataStoreService.readAll();

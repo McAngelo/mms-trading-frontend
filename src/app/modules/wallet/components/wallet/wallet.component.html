@@ -1,6 +1,6 @@
 <!-- begin:: Modal example -->
 <app-modal #modal [modalConfig]="modalConfig">
-  Modal body html
+  <app-horizontal (fundWallet)="receiveData($event)"></app-horizontal>
 </app-modal>
 <!-- <button class="btn btn-primary" (click)="openModal()">Open modal</button> -->
 <!-- Note: Don't forget import ModalsModule (from _metronic/partials) into your module -->
@@ -14,7 +14,7 @@
           border-primary border border-dashed
           p-6
           mb-xl-8
-        ">
+        " *ngIf="walletBalance === 0">
   <app-keenicon name="shield-tick" class="fs-2 text-primary me-4"></app-keenicon>
   <div class="d-flex flex-stack flex-grow-1 flex-wrap flex-md-nowrap">
     <div class="mb-3 mb-md-0 fw-bold">

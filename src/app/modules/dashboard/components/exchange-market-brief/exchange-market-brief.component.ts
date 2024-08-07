@@ -1,4 +1,4 @@
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { DashboardStoreService, ExchangeData, ExchangeMarketBrief } from '../../../../shared';
 
 import { Observable, of, Subscription } from 'rxjs';
@@ -107,7 +107,7 @@ export class ExchangeMarketBriefComponent  implements OnInit, OnDestroy {
     },
   ];
 
-  constructor(private _dashboardStoreService: DashboardStoreService) {}
+  constructor(cd: ChangeDetectorRef, private _dashboardStoreService: DashboardStoreService) {}
 
   ngOnInit(): void {
     //Called after the constructor, initializing input properties, and the first call to ngOnChanges.
