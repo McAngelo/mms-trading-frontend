@@ -28,7 +28,7 @@
       <!-- begin::Balance -->
       <div class="d-flex text-center flex-column text-white pt-8">
         <span class="fw-bold fs-7">Your Balance</span>
-        <span class="fw-bolder fs-2x pt-1">$37,562.00</span>
+        <span class="fw-bolder fs-2x pt-1"> {{ walletBalance | currency }}</span>
       </div>
       <!-- end::Balance -->
     </div>
@@ -69,7 +69,7 @@
           <!-- end::Title -->
           <!-- begin::Label -->
           <div class="d-flex align-items-center">
-            <div class="fw-bolder fs-5 text-gray-800 pe-1">1,200</div>
+            <div class="fw-bolder fs-5 text-gray-800 pe-1">{{ availableStocks}}</div>
             <!-- <app-keenicon name="category" class="fs-5 text-danger ms-1"></app-keenicon> -->
           </div>
           <!-- end::Label -->
@@ -98,7 +98,7 @@
           <!-- end::Title -->
           <!-- begin::Label -->
           <div class="d-flex align-items-center">
-            <div class="fw-bolder fs-5 text-gray-800 pe-1">2</div>
+            <div class="fw-bolder fs-5 text-gray-800 pe-1">{{ totalPortfolio }}</div>
             <!-- <app-keenicon name="arrow-up" class="fs-5 text-success ms-1"></app-keenicon> -->
           </div>
           <!-- end::Label -->
@@ -127,7 +127,7 @@
           <!-- end::Title -->
           <!-- begin::Label -->
           <div class="d-flex align-items-center">
-            <div class="fw-bolder fs-5 text-gray-800 pe-1">27</div>
+            <div class="fw-bolder fs-5 text-gray-800 pe-1">{{totalOrders}}</div>
             <!-- <app-keenicon name="arrow-down" class="fs-5 text-danger ms-1"></app-keenicon> -->
           </div>
           <!-- end::Label -->

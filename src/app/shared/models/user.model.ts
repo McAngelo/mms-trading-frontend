@@ -58,6 +58,8 @@ export interface User {
   roles: Role[];
   portfolios: Portfolio[];
   wallet: Wallet[];
+  availableStocks?: any;
+  totalOrders?:any;
   createdDate: string;
   lastModifiedDate: string;
   name: string;
