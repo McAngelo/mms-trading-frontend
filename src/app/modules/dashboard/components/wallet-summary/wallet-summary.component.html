@@ -28,7 +28,7 @@
       <!-- begin::Balance -->
       <div class="d-flex text-center flex-column text-white pt-8">
         <span class="fw-bold fs-7">Your Balance</span>
-        <span class="fw-bolder fs-2x pt-1"> {{ walletBalance | currency }}</span>
+        <span class="fw-bolder fs-2x pt-1"> {{ walletBalance | async | currency }}</span>
       </div>
       <!-- end::Balance -->
     </div>

@@ -1,7 +1,10 @@
-import { ChangeDetectorRef, AfterViewInit, Component, EventEmitter, Input, OnDestroy, OnInit, Output, Renderer2, TemplateRef, ViewChild } from '@angular/core';
-import { SweetAlertOptions } from 'sweetalert2';
-import moment from 'moment';
-import { BehaviorSubject, Subscription } from 'rxjs';
+import { Component, OnDestroy, OnInit} from '@angular/core';
+import { BehaviorSubject, catchError, map, Observable, of, Subscription, switchMap } from 'rxjs';
+import { environment } from 'environment';
+import { UserDataStoreService, UserStore } from 'src/app/shared';
+import { HttpClient } from '@angular/common/http';
+import { GetOrdersDto } from 'src/app/shared/interfaces/Orders';
+import { stocks } from 'src/app/shared/common/stocks';
 
 interface Stock {
   name: string;
@@ -9,37 +12,16 @@ interface Stock {
   icon: string;
 }
 
-interface OrderType {
-  id: number;
-  name: string;
-}
-
-interface TradeType {
-  id: number;
-  name: string;
-}
-
-interface OrderStatus {
-  id: number;
-  name: string;
-}
-
-interface Portofolio {
-  id: number;
-  name: string;
-}
-
-interface TradeResult {
+interface Order {
   orderId: string;
   stock: Stock;
-  portfolio: Portofolio;
-  orderType: OrderType;
-  tradeType: TradeType;
-  status: OrderStatus;
+  type: String;
+  side: String;
+  status: String;
   quantity: number;
   unitPrice: number;
   totalPrice: number;
-  date: Date
+  date: String
 }
 
 @Component({
@@ -48,177 +30,76 @@ interface TradeResult {
   styleUrl: './order-listings.component.scss'
 })
 export class OrderListingsComponent implements OnInit, OnDestroy {
-
-  
   isLoading$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
   isLoading: boolean;
   values: any = '';
+
   private unsubscribe: Subscription[] = [];
+  totalOrders$ = of(0);
+  currentPage = 0;
+  pageSize = 5;
 
-  portfolios: Portofolio[] = [
-    { id: 1, name: 'Basic' },
-    { id: 2, name: 'TurnTabl Trades' },
-  ];
 
-  stocks: Stock[] = [
-    {
-      name: 'Microsoft',
-      symbol: 'MSFT',
-      icon: './assets/media/svg/brand-logos/microsoft-5.svg',
-    },
-    {
-      name: 'Amazon',
-      symbol: 'AMZN',
-      icon: './assets/media/svg/brand-logos/amazon.svg',
-    },
-    {
-      name: 'NetFlix',
-      symbol: 'NFLX',
-      icon: './assets/media/svg/brand-logos/netflix.svg',
-    },
-    {
-      name: 'Google',
-      symbol: 'GOOGL',
-      icon: './assets/media/svg/brand-logos/google-icon.svg',
-    },
-    {
-      name: 'Apple',
-      symbol: 'AAPL',
-      icon: './assets/media/svg/brand-logos/apple-black.svg',
-    },
-    {
-      name: 'Tesla',
-      symbol: 'TSLA',
-      icon: './assets/media/svg/brand-logos/tesla.svg',
-    },
-    {
-      name: 'Oracle',
-      symbol: 'ORCL',
-      icon: './assets/media/svg/brand-logos/oracle.svg',
-    },
-    {
-      name: 'IBM',
-      symbol: 'IBM',
-      icon: './assets/media/svg/brand-logos/ibm-logo.svg',
-    },
-  ];
-
-  orderTypes: OrderType[] = [
-    { id: 1, name: 'Single' },
-    { id: 2, name: 'Split' },
-  ];
-
-  tradeTypes: TradeType[] = [
-    { id: 1, name: 'Market' },
-    { id: 2, name: 'Limit' },
-  ];
-
-  orderStatuses: OrderStatus[] = [
-    { id: 1, name: 'Open' },
-    { id: 2, name: 'Cancelled' },
-    { id: 3, name: 'Filled' },
-    { id: 4, name: 'Failed' },
-  ];
-
-  tradesResult: TradeResult[] = [];
-
+  tradesResult$: Observable<Order[]>; 
   datatableConfig: DataTables.Settings = {};
+  typeof: any;
 
-  constructor(private cdr: ChangeDetectorRef) {
-    const loadingSubscr = this.isLoading$
-      .asObservable()
-      .subscribe((res) => (this.isLoading = res));
+  constructor(
+    private _userDataStoreService: UserDataStoreService,
+    private _http: HttpClient,
+  ) {
+    const loadingSubscr = this.isLoading$.asObservable().subscribe((res) => (this.isLoading = res));
     this.unsubscribe.push(loadingSubscr);
   }
 
   ngOnInit(): void {
-    this.generateTradesResult(10);
+    this.getUserOrders();
+    // this.tradesResult$.subscribe(data => this.totalOrders$ = of(data.length));
   }
 
-  
-  getRandomElement<T>(array: T[]): T {
-    return array[Math.floor(Math.random() * array.length)];
+  getUserOrders() {
+    this.tradesResult$ = this._userDataStoreService.userData.pipe(
+      map((data: UserStore | undefined) => data?.userId ?? -1),
+      switchMap((userId: number) =>
+        this._http.get<any>(`${environment.ORDER_SERVICE_BASE_URL}/orders/users/${userId}?page=${this.currentPage}&size=${this.pageSize}`).pipe(
+          map((response: any) => {
+            if (!response.data.orders) return []; 
+
+            this.totalOrders$ = of(response.data.totalEntries);
+            console.log(response.data.totalEntries);
+            console.log(this.totalOrders$);
+      
+            return response.data.orders.map((order: GetOrdersDto) => ({
+              orderId: order.id.toString(),
+              stock: this.getStockByTicker(order.ticker),
+              side: order.side,
+              type: order.orderType,
+              status: order.status,
+              quantity: order.quantity,
+              unitPrice: (order.orderType === 'MARKET' && order.status === 'PENDING') ? null : order.price,
+              totalPrice: (order.orderType === 'MARKET' && order.status === 'PENDING') ? null : order.price * order.quantity,
+              date: order.dateCreated,
+            }));
+          }),
+          catchError((error: any) => {
+            console.log(error);
+            return of([]);
+          })
+        )
+      )
+    );
   }
 
-  getRandomValue(min: number, max: number): number {
-    return parseFloat((Math.random() * (max - min) + min).toFixed(2));
+  getStockByTicker(ticker: string): Stock {
+    return stocks.find(stock => stock.symbol === ticker);
   }
 
-  getRandomDigit(): string {
-    return Math.floor(Math.random() * 10).toString();
-}
-
-getRandomLetter(): string {
-    const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-    return letters[Math.floor(Math.random() * letters.length)];
-}
-
- generateRandomId(): string {
-    let digits = "";
-    for (let i = 0; i < 5; i++) {
-        digits += this.getRandomDigit();
-    }
-
-    let letters = "";
-    for (let i = 0; i < 4; i++) {
-        letters += this.getRandomLetter();
-    }
-
-    return `${digits}-${letters}`;
-}
-
-getRandomDate(start: Date, end: Date): Date {
-  const startTime = start.getTime();
-  const endTime = end.getTime();
-  const randomTime = new Date(startTime + Math.random() * (endTime - startTime));
-  return randomTime;
-}
-
-formatDate(date: Date): string {
-  const day = String(date.getDate()).padStart(2, '0');
-  const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are zero-based
-  const year = date.getFullYear();
-  return `${day}/${month}/${year}`;
-}
-
-
-
-  generateTradesResult(num: number): TradeResult[] {
-    // Generate a random date between May 1, 2024, and today
-    const startDate = new Date('2024-05-01');
-    const endDate = new Date(); // Today's date
-
-
-    const tradesResult: TradeResult[] = [];
-    for (let i = 0; i < num; i++) {
-      const stock = this.getRandomElement(this.stocks);
-      const orderType = this.getRandomElement(this.orderTypes);
-      const tradeType = this.getRandomElement(this.tradeTypes);
-      const status = this.getRandomElement(this.orderStatuses);
-      const quantity = Math.floor(this.getRandomValue(1, 1000));
-      const unitPrice = this.getRandomValue(5, 200);
-      const totalPrice = parseFloat((quantity * unitPrice).toFixed(2));
-      const portfolio = this.getRandomElement(this.portfolios);
-      const randomDate = this.getRandomDate(startDate, endDate);
-      const formattedRandomDate = this.formatDate(randomDate);
-
-      this.tradesResult.push({
-        orderId: this.generateRandomId(),
-        stock,
-        portfolio,
-        orderType,
-        tradeType,
-        status,
-        quantity,
-        unitPrice,
-        totalPrice,
-        date:randomDate
-      });
-    }
-    return tradesResult;
+  onPageChange(page: number) {
+    this.currentPage = page;
+    this.getUserOrders();
   }
 
-  ngOnDestroy() {
+    ngOnDestroy() {
     this.unsubscribe.forEach((sb) => sb.unsubscribe());
   }
 

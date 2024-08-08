@@ -7,6 +7,7 @@ import { SharedModule } from 'src/app/_metronic/shared/shared.module';
 import { DropdownMenusModule } from '../../_metronic/partials/content/dropdown-menus/dropdown-menus.module';
 import { OrderListingsComponent, OrderDetailsComponent } from './';
 import { OrderSearchComponent } from './components/order-search/order-search.component';
+import { PaginationModule } from 'src/app/shared/components/pagination/pagintation.module';
 
 
 
@@ -23,7 +24,8 @@ import { OrderSearchComponent } from './components/order-search/order-search.com
     ModalsModule,
     SharedModule,
     DataTablesModule,
-    DropdownMenusModule
+    DropdownMenusModule,
+    PaginationModule
   ]
 })
 export class OrdersModule { }

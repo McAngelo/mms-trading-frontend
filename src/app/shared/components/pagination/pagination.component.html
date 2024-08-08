@@ -1,0 +1,26 @@
+<div class="d-flex flex-stack flex-wrap pt-10">
+    <div class="fs-6 fw-bold text-gray-700">
+      Showing {{ (currentPage - 1) * pageSize + 1 }} to {{ Math.min(currentPage * pageSize, totalItems) }} of {{ totalItems }} entries
+    </div>
+  
+    <ul class="pagination">
+      <li class="page-item previous" [ngClass]="{'disabled': currentPage === 1}">
+        <a class="page-link cursor-pointer" (click)="previousPage()">
+          <i class="previous"></i>
+        </a>
+      </li>
+  
+      <li *ngFor="let page of visiblePages" class="page-item" [ngClass]="{'active': page === currentPage}">
+        <a class="page-link cursor-pointer" (click)="onPageChange(page)">
+          {{ page + 1 }}
+        </a>
+      </li>
+  
+      <li class="page-item next" [ngClass]="{'disabled': currentPage === totalPages}">
+        <a class="page-link cursor-pointer" (click)="nextPage()">
+          <i class="next"></i>
+        </a>
+      </li>
+    </ul>
+  </div>
+  

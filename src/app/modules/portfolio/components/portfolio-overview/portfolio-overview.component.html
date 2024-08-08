@@ -30,38 +30,15 @@
   </div>
   
   <div class="row g-6 g-xl-9">
-    <div class="col-md-6 col-xl-4">
+
+    <div *ngFor="let portfolio of userPortofolios" class="col-md-6 col-xl-4">
       <app-portfolio-card
-        icon="./assets/media/svg/brand-logos/plurk.svg"
-        badgeColor="primary"
-        status="View Orders"
-        statusColor="primary"
-        title="Basic Portfolio"
-        description="$ 5,000.00 worth of stocks"
-        profit="$284,900.00"
-        profitPercent="25"
-        loss="$4,900.00"
-        lossPercent="5"
-        [progress]="100"
-        [users]="stocks"
+        title="{{ portfolio.name }}"
       />
+
+      {{ portfolio.name }}
     </div>
-  
-    <div class="col-md-6 col-xl-4">
-      <app-portfolio-card
-        icon="./assets/media/svg/brand-logos/disqus.svg"
-        badgeColor="primary"
-        status="View Orders"
-        statusColor="primary"
-        title="TurnTabl Portfolio"
-        description="CRM App application to HR efficiency"
-        date="May 10, 2021"
-        budget="$36,400.00"
-        [progress]="100"
-        [users]="stocks2"
-      />
-    </div>
-  
+
     <!-- <div class="col-md-6 col-xl-4">
       <app-card2
         icon="./assets/media/svg/brand-logos/figma-1.svg"
@@ -168,7 +145,7 @@
     </div> -->
   </div>
   
-  <div class="d-flex flex-stack flex-wrap pt-10">
+  <!-- <div class="d-flex flex-stack flex-wrap pt-10">
     <div class="fs-6 fw-bold text-gray-700">Showing 1 to 1 of 2 entries</div>
   
     <ul class="pagination">
@@ -182,7 +159,7 @@
         <a class="page-link cursor-pointer"> 1 </a>
       </li>
   
-      <!-- <li class="page-item">
+      <li class="page-item">
         <a class="page-link cursor-pointer"> 2 </a>
       </li>
   
@@ -200,7 +177,7 @@
   
       <li class="page-item">
         <a class="page-link cursor-pointer"> 6 </a>
-      </li> -->
+      </li>
   
       <li class="page-item next">
         <a class="page-link cursor-pointer">
@@ -208,5 +185,5 @@
         </a>
       </li>
     </ul>
-  </div>
+  </div> -->
   
