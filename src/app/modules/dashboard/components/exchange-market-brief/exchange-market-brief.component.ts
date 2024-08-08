@@ -114,15 +114,15 @@ export class ExchangeMarketBriefComponent  implements OnInit, OnDestroy {
     //Add 'implements OnInit' to the class.
     this.exchangeDataObj$ = this._dashboardStoreService.exchangeData;
     this.objSubscription = this.exchangeDataObj$.subscribe((data: ExchangeData) => {
-      console.log(data);
+      //console.log(data);
       if(this.exchangeName == "EXCHANGE 1"){
         this.marketBriefs$ = of( this.updateExchangeMarketBrief(data.EXCHANGE1, this.exchangeMarketBrief));
-        console.log(`${this.exchangeName} Market brief`, this.marketBriefs$);
+        //console.log(`${this.exchangeName} Market brief`, this.marketBriefs$);
       }
       
       if(this.exchangeName == "EXCHANGE 2"){
         this.marketBriefs$ = of(this.updateExchangeMarketBrief(data.EXCHANGE2, this.exchangeMarketBrief));
-        console.log(`${this.exchangeName} Market brief`, this.marketBriefs$);
+        //console.log(`${this.exchangeName} Market brief`, this.marketBriefs$);
       }
       
     });
@@ -144,7 +144,7 @@ export class ExchangeMarketBriefComponent  implements OnInit, OnDestroy {
         }
       });
     }
-    console.log("EX 1 DATA", exchangeMarketBrief);
+    //console.log("EX 1 DATA", exchangeMarketBrief);
   return exchangeMarketBrief;
 
 }

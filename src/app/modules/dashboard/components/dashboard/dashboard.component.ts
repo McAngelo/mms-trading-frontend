@@ -234,7 +234,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
     console.log(this.webSocket);
     this.webSocket.onmessage = (event) => {
       this.myStock = JSON.parse(event.data);
-      console.log(this.myStock);
+      //console.log(this.myStock);
       let checkStore = JSON.parse(sessionStorage.getItem('exchangeData') || '{}');
       if(Object.keys(checkStore).length === 0){
         this._dashboardStoreService.create(this.myStock);

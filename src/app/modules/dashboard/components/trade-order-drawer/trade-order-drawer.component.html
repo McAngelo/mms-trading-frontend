@@ -1,10 +1,15 @@
-<div class="app-navbar-item" [ngClass]="itemClass">
-    <div [ngClass]="btnClass" class="position-relative" id="kt_drawer_trade_order_toggle">
+<!-- <div class="app-navbar-item" [ngClass]="itemClass" (click)="displayStock()" >
+    <div [ngClass]="btnClass" class="position-relative">
       <app-keenicon name="purchase" class="fs-2"></app-keenicon>
-      <!-- <span
-        class="bullet bullet-dot bg-danger h-6px w-6px position-absolute translate-middle top-0 start-50 animation-blink">
-      </span> -->
     </div>
+  </div> -->
+
+<!-- <ng-container *ngIf="displaySlide"> -->
+
+
+
+  <div  id="kt_drawer_trade_order_toggle" #triggerBtn>
+
   </div>
   
 <div
@@ -18,6 +23,7 @@
   data-kt-drawer-direction="end"
   data-kt-drawer-toggle="#kt_drawer_trade_order_toggle"
   data-kt-drawer-close="#kt_drawer_trade_order_close"
+  
 >
   <div class="card w-100 rounded-0" id="kt_drawer_trade_order_messenger">
     <div class="card-header pe-5" id="kt_drawer_trade_order_messenger_header">
@@ -25,13 +31,13 @@
         <div class="px-5 py-5 d-flex align-items-sm-center">
             <div class="symbol symbol-50px me-5">
               <span class="symbol-label">
-                <img src="{{ tradeOrder.icon }}" class="h-50 align-self-center" alt="" />
+                <img src="{{ localTradeObj.icon }}" class="h-50 align-self-center" alt="" />
               </span>
             </div>
-            <div class="fs-5 text-gray-900 fw-bolder"> {{ tradeOrder.name }} Stock Options</div>
+            <div class="fs-5 text-gray-900 fw-bolder"> {{ localTradeObj.name }} Stock Options</div>
           </div>
       </div>
-      <div class="card-toolbar">
+      <div class="card-toolbar" >
         <!-- <div class="me-2">
           <button
             class="btn btn-sm btn-icon btn-active-light-primary"
@@ -53,6 +59,7 @@
     </div>
     <!-- Calculations -->
     <div class="px-7 py-5">
+      {{ localTradeObj | json }}
         <div class="mb-10">
           <label class="form-label fw-bold">Market Brief:</label>
           <!-- begin::Table -->
@@ -178,10 +185,11 @@
           <button type="submit" class="btn btn-sm btn-light-primary me-2" data-kt-menu-dismiss="true">
             Buy
           </button>
-          <button type="submit" class="btn btn-sm btn-light-primary" data-kt-menu-dismiss="true">
+          <button type="submit" (click)="displayStock()" class="btn btn-sm btn-light-primary" data-kt-menu-dismiss="true">
             Sell
           </button>
         </div>
       </div>
   </div>
 </div>
+<!-- </ng-container> -->
