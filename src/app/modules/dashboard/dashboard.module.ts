@@ -7,6 +7,7 @@ import { SharedModule } from 'src/app/_metronic/shared/shared.module';
 import { NgApexchartsModule } from 'ng-apexcharts';
 import { DropdownMenusModule } from '../../_metronic/partials/content/dropdown-menus/dropdown-menus.module';
 import { WalletModule } from '../wallet/wallet.module';
+import { ReactiveFormsModule } from '@angular/forms';
 
 import { 
   WalletSummaryComponent,
@@ -48,7 +49,8 @@ import { AdminHealthCheckComponent } from './components/admin-dashboard/admin-he
     SharedModule,
     NgApexchartsModule,
     DropdownMenusModule,
-    WalletModule
+    WalletModule,
+    ReactiveFormsModule
   ]
 })
 export class DashboardModule { }

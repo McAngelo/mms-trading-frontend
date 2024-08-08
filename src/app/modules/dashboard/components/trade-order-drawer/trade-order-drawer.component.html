@@ -1,17 +1,4 @@
-<!-- <div class="app-navbar-item" [ngClass]="itemClass" (click)="displayStock()" >
-    <div [ngClass]="btnClass" class="position-relative">
-      <app-keenicon name="purchase" class="fs-2"></app-keenicon>
-    </div>
-  </div> -->
-
-<!-- <ng-container *ngIf="displaySlide"> -->
-
-
-
-  <div  id="kt_drawer_trade_order_toggle" #triggerBtn>
-
-  </div>
-  
+<div  id="kt_drawer_trade_order_toggle" #triggerBtn></div>
 <div
   id="kt_drawer_trade_order"
   class="bg-body"
@@ -38,16 +25,6 @@
           </div>
       </div>
       <div class="card-toolbar" >
-        <!-- <div class="me-2">
-          <button
-            class="btn btn-sm btn-icon btn-active-light-primary"
-            data-kt-menu-trigger="click"
-            data-kt-menu-placement="bottom-end"
-            data-kt-menu-flip="top-end"
-          >
-            <i class="bi bi-three-dots fs-3"></i>
-          </button>
-        </div> -->
         <div
           class="btn btn-sm btn-icon btn-active-light-primary"
           id="kt_drawer_trade_order_close"
@@ -58,137 +35,86 @@
       </div>
     </div>
     <!-- Calculations -->
-    <div class="px-7 py-5">
-        <div class="mb-10">
-          <label class="form-label fw-bold">Market Brief:</label>
-          <!-- begin::Table -->
-          <table class="table align-middle gs-0 gy-4">
-            <!-- begin::Table head -->
-            <thead>
-              <tr class="fw-bolder text-muted bg-light">
-                <th class="min-w-25px">Price</th>
-                <th class="min-w-25px">Ask </th>
-                <th class="min-w-25px">Bid </th>
-                <th class="min-w-25px">Last Traded </th>
-              </tr>
-            </thead>
-            <!-- end::Table head -->
-            <!-- begin::Table body -->
-            <tbody>
-              <tr>
-                <td>
-                  <span class="form-check-label">EX 1</span>
-                </td>
-                <td>
-                  <span class="form-check-label">$2.70</span>
-                </td>
-                <td>
-                  <span class="form-check-label">$5.20</span>
-                </td>
-                <td>
-                  <span class="form-check-label">$5.20</span>
-                </td>
-              </tr>
-              <tr>
-                <td>
-                  <span class="form-check-label">EX 2</span>
-                </td>
-                <td>
-                  <span class="form-check-label">$2.0</span>
-                </td>
-                <td>
-                  <span class="form-check-label">$1.00</span>
-                </td>
-                <td>
-                  <span class="form-check-label">$3.0</span>
-                </td>
-              </tr>
-            </tbody>
-            <!-- end::Table body -->
-          </table>
-          <!-- end::Table -->
-        </div>
-        <div class="mb-10">
-          <label class="form-label fw-bold">Portfolio:</label>
-      
-          <div>
-            <select class="form-select form-select-solid" data-kt-select2="true" data-placeholder="Select option"
-              data-allow-clear="true">
-              <option selected ngValue="values">Select portfolio</option>
-              <option value="1">Basic Portfolio</option>
-              <option value="2">TurnTabl Trades Portfolio</option>
-            </select>
-          </div>
-        </div>
-      
-        <div class="mb-10">
-          <label class="form-label fw-bold">Trade Type:</label>
-      
-          <div class="d-flex">
-            <label class="form-check form-check-sm form-check-custom form-check-solid me-5">
-              <input class="form-check-input" type="checkbox" value="1" />
-              <span class="form-check-label">Market</span>
-            </label>
-      
-            <label class="form-check form-check-sm form-check-custom form-check-solid">
-              <input class="form-check-input" type="checkbox" value="2" defaultChecked="{true}" />
-              <span class="form-check-label">Limit</span>
-            </label>
-          </div>
-        </div>
-      
-        <div class="mb-10">
-          <label class="form-label fw-bold">Quantity:</label>
-          <div>
-            <input class="form-control form-control-solid" type="number" placeholder="3" />
-          </div>
-        </div>
-      
-        <div class="mb-10">
-          <label class="form-label fw-bold">Amount:</label>
-          <div>
-            <input class="form-control form-control-solid" type="number" placeholder="1.30" />
-          </div>
-        </div>
-      
-        <div class="mb-10">
-          <label class="form-label fw-bold">Order Type:</label>
-      
-          <div class="
-              form-check form-switch form-switch-sm form-check-custom form-check-solid
-            ">
-            <input class="form-check-input" type="checkbox" value="" name="notifications" defaultChecked="{true}" />
-            <label class="form-check-label">Split Enabled</label>
-          </div>
-        </div>
-      
-        <div class="mb-10">
-          <label class="form-label fw-bold">Exchange:</label>
-      
-          <div>
-            <select class="form-select form-select-solid" data-kt-select2="true" data-placeholder="Select option"
-              data-allow-clear="true">
-              <option></option>
-              <option selected ngValue="values">Select Exchange</option>
-              <option value="1">Exchange 1</option>
-              <option value="2">Exchange 2</option>
-            </select>
-          </div>
-        </div>
-      
-        <div class="d-flex justify-content-end">
-          <button type="reset" class="btn btn-sm btn-light btn-active-light-primary me-2" id="kt_drawer_trade_order_close" data-kt-menu-dismiss="true" #closeBtn>
-            Discard
-          </button>
-      
-          <button type="submit" (click)="executeOrder('buy', {})" class="btn btn-sm btn-light-primary me-2" data-kt-menu-dismiss="true">
-            Buy
-          </button>
-          <button type="submit" (click)="executeOrder('sell', {})" class="btn btn-sm btn-light-primary" data-kt-menu-dismiss="true">
-            Sell
-          </button>
+    <form [formGroup]="createOrderForm" (ngSubmit)=executeTrade(createOrderForm) class="px-7 py-5">
+      <div class="mb-10">
+        <label class="form-label fw-bold">Portfolio:</label>
+    
+        <div>
+          <select formControlName="portfolioId" class="form-select form-select-solid" data-kt-select2="true" data-placeholder="Select option"
+            data-allow-clear="true">
+            <option default ngValue="">Select portfolio</option>
+            <option *ngFor="let portfolio of userPortfolios | async" [value]="portfolio.id">
+              {{ portfolio.name }}
+            </option>
+          </select>
         </div>
       </div>
+    
+      <div class="mb-10">
+        <label class="form-label fw-bold">Trade Type:</label>
+    
+        <div class="d-flex">
+          <label class="form-check form-check-sm form-check-custom form-check-solid me-5">
+            <input id="type" formControlName="type" class="form-check-input" type="radio" value="MARKET" />
+            <span class="form-check-label">Market</span>
+          </label>
+    
+          <label class="form-check form-check-sm form-check-custom form-check-solid">
+            <input id="type" formControlName="type" class="form-check-input" type="radio" value="LIMIT" />
+            <span class="form-check-label">Limit</span>
+          </label>
+        </div>
+      </div>
+    
+      <div class="mb-10">
+        <label class="form-label fw-bold">Quantity:</label>
+        <div>
+          <input id="quantity" formControlName="quantity"  class="form-control form-control-solid" type="number" type placeholder="0" />
+        </div>
+      </div>
+    
+      <div  class="mb-10" *ngIf="createOrderForm.get('type')?.value === 'LIMIT' ">
+        <label class="form-label fw-bold">Amount:</label>
+        <div>
+          <input formControlName="price" class="form-control form-control-solid" type="number" placeholder="0.00" />
+        </div>
+      </div>
+    
+      <div class="mb-10">
+        <label class="form-label fw-bold">Order Type:</label>
+    
+        <div class="form-check form-switch form-switch-sm form-check-custom form-check-solid">
+          <input formControlName="splitEnabled" class="form-check-input" type="checkbox" name="notifications" checked />
+          <label class="form-check-label">Split Enabled</label>
+        </div>
+      </div>
+    
+      <div class="mb-10">
+        <label class="form-label fw-bold">Exchange:</label>
+    
+        <div>
+          <select formControlName="preferredExchangeSlug" class="form-select form-select-solid" data-kt-select2="true" data-placeholder="Select option"
+            data-allow-clear="true">
+            <option></option>
+            <option selected ngValue="values">Select Exchange</option>
+            <option value="EXCHANGE1">Exchange 1</option>
+            <option value="EXCHANGE2">Exchange 2</option>
+          </select>
+        </div>
+      </div>
+    
+      <div class="d-flex justify-content-end">
+        <button type="reset" class="btn btn-sm btn-light btn-active-light-primary me-2" id="kt_drawer_trade_order_close" data-kt-menu-dismiss="true" #closeBtn>
+          Discard
+        </button>
+    
+        <button type="submit" (click)="buy(createOrderForm)" class="btn btn-sm btn-light-primary me-2" data-kt-menu-dismiss="true">
+          Buy
+        </button>
+        <button type="submit" (click)="sell(createOrderForm)" class="btn btn-sm btn-light-primary" data-kt-menu-dismiss="true">
+          Sell
+        </button>
+      </div>
+    </form>
   </div>
 </div>
-<!-- </ng-container> -->

@@ -9,6 +9,7 @@ export const environment = {
   isMockEnabled: true,
   apiUrl: 'api',
   _apiEndpoint: 'http://localhost:8083/api/v1',
+  ORDER_SERVICE_BASE_URL: 'http://localhost:8084/api/v1',
   appThemeName: 'MMS Bank Trading',
   appPurchaseUrl: 'https://1.envato.market/EA4JP',
   appHTMLIntegration:'https://preview.keenthemes.com/metronic8/demo1/documentation/base/helpers/flex-layouts.html',
