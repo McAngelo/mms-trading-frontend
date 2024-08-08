@@ -34,17 +34,12 @@
         <span class="badge badge-light-success">+$ {{ stock.avgBuy }}</span> &nbsp;
         <span class="badge badge-light-info">-$ {{ stock.avgSell}}</span> &nbsp;
         <div>
-            <!-- <button
-                type="button"
-                class="btn btn-sm btn-icon btn-color-primary btn-active-light-primary"
-                data-kt-menu-trigger="click"
-                data-kt-menu-placement="bottom-end"
-                data-kt-menu-flip="top-end"
-            >
-                <app-keenicon name="category" class="fs-2"></app-keenicon>
-            </button>
-            <app-trade-order [tradeOrder]="stock" ></app-trade-order> -->
-            <!-- <app-trade-order-drawer [tradeOrder]="stock"></app-trade-order-drawer> -->
+          <div class="app-navbar-item ms-1 ms-lg-3" (click)="triggerDrawer(stock)">
+            <div
+              class="position-relative btn btn-icon btn-custom btn-icon-muted btn-active-light btn-active-color-primary w-35px h-35px w-md-40px h-md-40px">
+              <app-keenicon name="purchase" class="fs-2"></app-keenicon>
+            </div>
+          </div>
         </div>
       </div>
       <!-- end::Section-->

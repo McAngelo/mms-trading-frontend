@@ -1,5 +1,5 @@
 import { ChangeDetectorRef, ChangeDetectionStrategy, OnChanges, Component, OnInit, Input, EventEmitter, ViewChild, ElementRef } from '@angular/core';
-import { TradeDrawerService, StockDrawerObj, } from 'src/app/shared';
+import { TradeDrawerService, NotificationService, StockDrawerObj, } from 'src/app/shared';
 import { Observable, Subscription } from 'rxjs';
 @Component({
   selector: 'app-trade-order-drawer',
@@ -23,7 +23,8 @@ export class TradeOrderDrawerComponent implements OnInit, OnChanges {
   public traderObj$!: Observable<StockDrawerObj>;
   public objSubscription!: Subscription;
 
-  constructor(private cdr: ChangeDetectorRef, private _tds:TradeDrawerService) {
+  constructor(private cdr: ChangeDetectorRef, private _tds:TradeDrawerService, 
+    private _notificationService: NotificationService) {
     this.traderObj$ = this._tds.switchState$;
 
     this.objSubscription = this.traderObj$.subscribe((data: StockDrawerObj)=>{
@@ -48,7 +49,10 @@ export class TradeOrderDrawerComponent implements OnInit, OnChanges {
   }
 
   executeOrder(action:string, model:any): void {
+
+    this._notificationService.showInfo(`We are processing your ${action} orders`, `Executing ${action} Order`);
     this.closeBtn?.nativeElement.click();
+
   }
 }
 
