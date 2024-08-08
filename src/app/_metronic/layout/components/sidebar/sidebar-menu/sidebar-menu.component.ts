@@ -25,8 +25,8 @@ export class SidebarMenuComponent implements OnInit {
   
       this.objSubscription = this.userObj$.subscribe((data: UserStore | undefined) => {
         this.userData = data;
-        this.adminRights = (data?.roles && data.roles[0]?.id !== undefined) 
-                      ? data.roles[0]?.id.toString() 
+        this.adminRights = (data?.roles && data.roles[0]?.name !== undefined) 
+                      ? data.roles[0]?.name.toString() 
                       : '0';
       });
     }
