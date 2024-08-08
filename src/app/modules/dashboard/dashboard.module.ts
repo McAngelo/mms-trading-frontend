@@ -18,6 +18,10 @@ import {
   DashboardComponent
 
 } from './';
+import { AdminDashboardComponent } from './components/admin-dashboard/admin-dashboard.component';
+import { AdminOverviewComponent } from './components/admin-dashboard/admin-overview/admin-overview.component';
+import { AdminSystemComponent } from './components/admin-dashboard/admin-system/admin-system.component';
+import { AdminHealthCheckComponent } from './components/admin-dashboard/admin-health-check/admin-health-check.component';
 
 
 
@@ -29,7 +33,11 @@ import {
     CandleStickChartsComponent,
     ExchangeMarketBriefComponent,
     DashboardComponent,
-    TradeOrderDrawerComponent
+    TradeOrderDrawerComponent,
+    AdminDashboardComponent,
+    AdminOverviewComponent,
+    AdminSystemComponent,
+    AdminHealthCheckComponent
   ],
   imports: [
     CommonModule,

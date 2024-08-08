@@ -1,6 +1,7 @@
 import { Component, ViewChild, OnInit, OnDestroy, ChangeDetectorRef, } from '@angular/core';
 import { ModalConfig, ModalComponent } from '../../../../_metronic/partials';
-import { DashboardStoreService, ExchangeData } from 'src/app/shared';
+import {  UserDataStoreService, UserStore, DashboardStoreService, ExchangeData } from 'src/app/shared';
+import { Observable, Subscription } from 'rxjs';
 import { data } from 'jquery';
 
 @Component({
@@ -9,6 +10,10 @@ import { data } from 'jquery';
   styleUrls: ['./dashboard.component.scss'],
 })
 export class DashboardComponent implements OnInit, OnDestroy {
+  public userObj$!: Observable<UserStore>;
+  public objSubscription!: Subscription;
+  public userData?: UserStore;
+  public adminRights: string = "";
   modalConfig: ModalConfig = {
     modalTitle: 'Modal title',
     dismissButtonLabel: 'Submit',
@@ -220,7 +225,10 @@ export class DashboardComponent implements OnInit, OnDestroy {
   private webSocket: WebSocket;
   myStock: ExchangeData = {};
 
-  constructor(private cdr: ChangeDetectorRef, private _dashboardStoreService: DashboardStoreService) {
+  constructor(
+    private cdr: ChangeDetectorRef, 
+    private _dashboardStoreService: DashboardStoreService,
+    private _userDataStoreService: UserDataStoreService) {
     this.webSocket = new WebSocket('ws://localhost:8082/market-stocks');
     //this.webSocket = new WebSocket('ws://localhost:8080/stocks');
     console.log(this.webSocket);
@@ -258,6 +266,14 @@ export class DashboardComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     //Called after the constructor, initializing input properties, and the first call to ngOnChanges.
     //Add 'implements OnInit' to the class.    
+    this.userObj$ = this._userDataStoreService.userData;
+  
+      this.objSubscription = this.userObj$.subscribe((data: UserStore | undefined) => {
+        this.userData = data;
+        this.adminRights = (data?.roles && data.roles[0]?.name !== undefined) 
+                      ? data.roles[0]?.name.toString() 
+                      : '0';
+      });
   }
 
   getRandomValue(min: number, max: number) {
