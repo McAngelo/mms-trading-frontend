@@ -149,7 +149,7 @@
                   ">
                   <div class="d-flex align-items-center">
                     <!-- <app-keenicon name="arrow-up" class="fs-3 text-success me-2"></app-keenicon> -->
-                    <div class="fs-2 fw-bolder">$ 4,500.00</div>
+                    <div class="fs-2 fw-bolder"> {{_user.wallet[0].balance | currency}}</div>
                   </div>
   
                   <div class="fw-bold fs-6 text-gray-500">Wallet Balance</div>
@@ -166,7 +166,7 @@
                   ">
                   <div class="d-flex align-items-center">
                     <!-- <app-keenicon name="arrow-up" class="fs-3 text-success me-2"></app-keenicon> -->
-                    <div class="fs-2 fw-bolder">2</div>
+                    <div class="fs-2 fw-bolder">{{_user.portfolios.length || 0}}</div>
                   </div>
   
                   <div class="fw-bold fs-6 text-gray-500">Total Portfolio</div>
@@ -183,7 +183,7 @@
                   ">
                   <div class="d-flex align-items-center">
                     <!-- <app-keenicon name="arrow-up" class="fs-3 text-success me-2"></app-keenicon> -->
-                    <div class="fs-2 fw-bolder">500</div>
+                    <div class="fs-2 fw-bolder">{{_user.availableStocks || 0}}</div>
                   </div>
   
                   <div class="fw-bold fs-6 text-gray-500">Total Stocks</div>
@@ -200,7 +200,7 @@
                   ">
                   <div class="d-flex align-items-center">
                     <!-- <app-keenicon name="arrow-up" class="fs-3 text-success me-2"></app-keenicon> -->
-                    <div class="fs-2 fw-bolder">27</div>
+                    <div class="fs-2 fw-bolder">{{_user.totalOrders || 0}}</div>
                   </div>
   
                   <div class="fw-bold fs-6 text-gray-500">Total Orders</div>
