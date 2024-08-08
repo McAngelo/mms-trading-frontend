@@ -16,6 +16,7 @@ export class TradeOrderDrawerComponent implements OnInit, OnChanges {
   displaySlide:boolean =false;
 
   @ViewChild('triggerBtn') triggerBtn?: ElementRef<HTMLElement>;
+  @ViewChild('closeBtn') closeBtn?: ElementRef<HTMLElement>;
 
   itemClass: string = 'ms-1 ms-lg-3';
   btnClass: string = 'btn btn-icon btn-custom btn-icon-muted btn-active-light btn-active-color-primary w-35px h-35px w-md-40px h-md-40px';
@@ -42,25 +43,12 @@ export class TradeOrderDrawerComponent implements OnInit, OnChanges {
   }
 
   ngOnChanges(changes:any):void {
-    console.log("Chanages", changes);
+    //console.log("Chanages", changes);
    // this.localTradeObj = changes.tardeOrder;
   }
 
-  displayStock(): void {
-    this.displaySlide = !this.displaySlide;
-
-    console.log("display");
-
-    // console.log("display value", this.displaySlide);
-    // //if(this.displaySlide){
-    //   this.localTradeObj = this.tradeOrder;
-    //   this.cdr.detectChanges();
-    //   console.log("child component", this.tradeOrder);
-    //   console.log("new component ", this.localTradeObj);
-    // //}
-
-      //this.triggerBtn?.nativeElement.click();
-    
+  executeOrder(action:string, model:any): void {
+    this.closeBtn?.nativeElement.click();
   }
 }
 

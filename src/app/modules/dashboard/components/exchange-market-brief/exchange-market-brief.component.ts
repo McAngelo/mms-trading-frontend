@@ -1,14 +1,24 @@
-import { ChangeDetectorRef, Component, Input, OnDestroy, OnInit } from '@angular/core';
-import { DashboardStoreService, ExchangeData, ExchangeMarketBrief } from '../../../../shared';
+import {
+  ChangeDetectorRef,
+  Component,
+  Input,
+  OnDestroy,
+  OnInit,
+} from '@angular/core';
+import {
+  DashboardStoreService,
+  ExchangeData,
+  ExchangeMarketBrief,
+  TradeDrawerService, StockDrawerObj, } from 'src/app/shared';
 
 import { Observable, of, Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-exchange-market-brief',
   templateUrl: './exchange-market-brief.component.html',
-  styleUrl: './exchange-market-brief.component.scss'
+  styleUrl: './exchange-market-brief.component.scss',
 })
-export class ExchangeMarketBriefComponent  implements OnInit, OnDestroy {
+export class ExchangeMarketBriefComponent implements OnInit, OnDestroy {
   @Input() color: string = '';
   @Input() exchangeName: string = '';
   marketBriefs$: Observable<ExchangeMarketBrief[]>;
@@ -26,18 +36,18 @@ export class ExchangeMarketBriefComponent  implements OnInit, OnDestroy {
       avgSell: 0.0,
       avgBuy: 0.0,
       maxPriceShift: 0.0,
-      lastTradedPrice: 0.0
+      lastTradedPrice: 0.0,
     },
     {
       name: 'Amazon',
       symbol: 'AMZN',
-      icon: './assets/media/svg/brand-logos/amazon.svg',      
+      icon: './assets/media/svg/brand-logos/amazon.svg',
       askPrice: 0.0,
       bidPrice: 0.0,
       avgSell: 0.0,
       avgBuy: 0.0,
       maxPriceShift: 0.0,
-      lastTradedPrice: 0.0
+      lastTradedPrice: 0.0,
     },
     {
       name: 'NetFlix',
@@ -48,7 +58,7 @@ export class ExchangeMarketBriefComponent  implements OnInit, OnDestroy {
       avgSell: 0.0,
       avgBuy: 0.0,
       maxPriceShift: 0.0,
-      lastTradedPrice: 0.0
+      lastTradedPrice: 0.0,
     },
     {
       name: 'Google',
@@ -59,7 +69,7 @@ export class ExchangeMarketBriefComponent  implements OnInit, OnDestroy {
       avgSell: 0.0,
       avgBuy: 0.0,
       maxPriceShift: 0.0,
-      lastTradedPrice: 0.0
+      lastTradedPrice: 0.0,
     },
     {
       name: 'Apple',
@@ -70,7 +80,7 @@ export class ExchangeMarketBriefComponent  implements OnInit, OnDestroy {
       avgSell: 0.0,
       avgBuy: 0.0,
       maxPriceShift: 0.0,
-      lastTradedPrice: 0.0
+      lastTradedPrice: 0.0,
     },
     {
       name: 'Tesla',
@@ -81,7 +91,7 @@ export class ExchangeMarketBriefComponent  implements OnInit, OnDestroy {
       avgSell: 0.0,
       avgBuy: 0.0,
       maxPriceShift: 0.0,
-      lastTradedPrice: 0.0
+      lastTradedPrice: 0.0,
     },
     {
       name: 'Oracle',
@@ -92,7 +102,7 @@ export class ExchangeMarketBriefComponent  implements OnInit, OnDestroy {
       avgSell: 0.0,
       avgBuy: 0.0,
       maxPriceShift: 0.0,
-      lastTradedPrice: 0.0
+      lastTradedPrice: 0.0,
     },
     {
       name: 'IBM',
@@ -103,54 +113,79 @@ export class ExchangeMarketBriefComponent  implements OnInit, OnDestroy {
       avgSell: 0.0,
       avgBuy: 0.0,
       maxPriceShift: 0.0,
-      lastTradedPrice: 0.0
+      lastTradedPrice: 0.0,
     },
   ];
 
-  constructor(cd: ChangeDetectorRef, private _dashboardStoreService: DashboardStoreService) {}
+  constructor(
+    cd: ChangeDetectorRef,
+    private _dashboardStoreService: DashboardStoreService,
+    private _tds:TradeDrawerService
+  ) {}
 
   ngOnInit(): void {
     //Called after the constructor, initializing input properties, and the first call to ngOnChanges.
     //Add 'implements OnInit' to the class.
     this.exchangeDataObj$ = this._dashboardStoreService.exchangeData;
-    this.objSubscription = this.exchangeDataObj$.subscribe((data: ExchangeData) => {
-      //console.log(data);
-      if(this.exchangeName == "EXCHANGE 1"){
-        this.marketBriefs$ = of( this.updateExchangeMarketBrief(data.EXCHANGE1, this.exchangeMarketBrief));
-        //console.log(`${this.exchangeName} Market brief`, this.marketBriefs$);
+    this.objSubscription = this.exchangeDataObj$.subscribe(
+      (data: ExchangeData) => {
+        //console.log(data);
+        if (this.exchangeName == 'EXCHANGE 1') {
+          this.marketBriefs$ = of(
+            this.updateExchangeMarketBrief(
+              data.EXCHANGE1,
+              this.exchangeMarketBrief
+            )
+          );
+          //console.log(`${this.exchangeName} Market brief`, this.marketBriefs$);
+        }
+
+        if (this.exchangeName == 'EXCHANGE 2') {
+          this.marketBriefs$ = of(
+            this.updateExchangeMarketBrief(
+              data.EXCHANGE2,
+              this.exchangeMarketBrief
+            )
+          );
+          //console.log(`${this.exchangeName} Market brief`, this.marketBriefs$);
+        }
       }
-      
-      if(this.exchangeName == "EXCHANGE 2"){
-        this.marketBriefs$ = of(this.updateExchangeMarketBrief(data.EXCHANGE2, this.exchangeMarketBrief));
-        //console.log(`${this.exchangeName} Market brief`, this.marketBriefs$);
-      }
-      
-    });
-    
+    );
   }
 
   updateExchangeMarketBrief(exchangeBrief: any, exchangeMarketBrief: any): any {
-    
-    if(exchangeBrief && Object.keys(exchangeBrief).length != 0){
-      exchangeMarketBrief.forEach((market:any) => {
-        const marketR = exchangeBrief.find((brief:any) => brief.TICKER === market.symbol );
+    if (exchangeBrief && Object.keys(exchangeBrief).length != 0) {
+      exchangeMarketBrief.forEach((market: any) => {
+        const marketR = exchangeBrief.find(
+          (brief: any) => brief.TICKER === market.symbol
+        );
         if (marketR) {
           market.askPrice = marketR.ASK_PRICE;
           market.bidPrice = marketR.BID_PRICE;
           market.maxPriceShift = marketR.MAX_PRICE_SHIFT;
           market.lastTradedPrice = marketR.LAST_TRADED_PRICE;
-          market.avgSell = marketR.SELL_LIMIT; 
+          market.avgSell = marketR.SELL_LIMIT;
           market.avgBuy = marketR.BUY_LIMIT;
         }
       });
     }
     //console.log("EX 1 DATA", exchangeMarketBrief);
-  return exchangeMarketBrief;
+    return exchangeMarketBrief;
+  }
 
-}
+  
+  triggerDrawer(orderData:any){
+    console.log("Local Object", orderData);
+    const order: StockDrawerObj = {
+      state: 'open',
+      tradeObj: orderData
+    }
+
+    this._tds.setSwitchState(order);
+
+  }
 
   ngOnDestroy(): void {
     this.objSubscription.unsubscribe();
   }
-
 }

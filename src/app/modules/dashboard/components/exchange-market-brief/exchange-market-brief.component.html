@@ -75,17 +75,12 @@
                   <span class="text-gray-900 fw-bolder text-hover-primary d-block mb-1 fs-6">$ {{ marketBrief.lastTradedPrice | number : '1.2-2' }}</span>
               </td>
               <td>
-                  <!-- <button
-                      type="button"
-                      class="btn btn-sm btn-icon btn-color-primary btn-active-light-primary"
-                      data-kt-menu-trigger="click"
-                      data-kt-menu-placement="bottom-end"
-                      data-kt-menu-flip="top-end"
-                  >
-                      <app-keenicon name="category" class="fs-2"></app-keenicon>
-                  </button>
-                  <app-trade-order [tradeOrder]="marketBrief" ></app-trade-order>-->
-                  <app-trade-order-drawer></app-trade-order-drawer>
+                <div class="app-navbar-item ms-1 ms-lg-3" (click)="triggerDrawer(marketBrief)">
+                  <div
+                    class="position-relative btn btn-icon btn-custom btn-icon-muted btn-active-light btn-active-color-primary w-35px h-35px w-md-40px h-md-40px">
+                    <app-keenicon name="purchase" class="fs-2"></app-keenicon>
+                  </div>
+                </div>
               </td>
             </tr>
           <!-- </ng-container> -->

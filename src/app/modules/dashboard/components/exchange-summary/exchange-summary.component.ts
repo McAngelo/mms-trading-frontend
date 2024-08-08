@@ -1,7 +1,5 @@
 import { Component, Input } from '@angular/core';
 import { TradeDrawerService, StockDrawerObj, } from 'src/app/shared';
-import { Observable, Subscription } from 'rxjs';
-import { data } from 'jquery';
 
 @Component({
   selector: 'app-exchange-summary',

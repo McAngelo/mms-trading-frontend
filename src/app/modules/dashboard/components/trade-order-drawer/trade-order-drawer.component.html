@@ -178,14 +178,14 @@
         </div>
       
         <div class="d-flex justify-content-end">
-          <button type="reset" class="btn btn-sm btn-light btn-active-light-primary me-2" id="kt_drawer_trade_order_close" data-kt-menu-dismiss="true">
+          <button type="reset" class="btn btn-sm btn-light btn-active-light-primary me-2" id="kt_drawer_trade_order_close" data-kt-menu-dismiss="true" #closeBtn>
             Discard
           </button>
       
-          <button type="submit" class="btn btn-sm btn-light-primary me-2" data-kt-menu-dismiss="true">
+          <button type="submit" (click)="executeOrder('buy', {})" class="btn btn-sm btn-light-primary me-2" data-kt-menu-dismiss="true">
             Buy
           </button>
-          <button type="submit" (click)="displayStock()" class="btn btn-sm btn-light-primary" data-kt-menu-dismiss="true">
+          <button type="submit" (click)="executeOrder('sell', {})" class="btn btn-sm btn-light-primary" data-kt-menu-dismiss="true">
             Sell
           </button>
         </div>
