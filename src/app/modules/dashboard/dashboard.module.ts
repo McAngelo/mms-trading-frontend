@@ -22,6 +22,7 @@ import { AdminDashboardComponent } from './components/admin-dashboard/admin-dash
 import { AdminOverviewComponent } from './components/admin-dashboard/admin-overview/admin-overview.component';
 import { AdminSystemComponent } from './components/admin-dashboard/admin-system/admin-system.component';
 import { AdminHealthCheckComponent } from './components/admin-dashboard/admin-health-check/admin-health-check.component';
+import { ReactiveFormsModule } from '@angular/forms';
 
 
 
@@ -48,7 +49,8 @@ import { AdminHealthCheckComponent } from './components/admin-dashboard/admin-he
     SharedModule,
     NgApexchartsModule,
     DropdownMenusModule,
-    WalletModule
+    WalletModule,
+    ReactiveFormsModule
   ]
 })
 export class DashboardModule { }

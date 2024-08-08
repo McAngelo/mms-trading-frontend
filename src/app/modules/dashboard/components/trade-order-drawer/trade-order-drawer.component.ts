@@ -1,15 +1,19 @@
 import { ChangeDetectorRef, ChangeDetectionStrategy, OnChanges, Component, OnInit, Input, EventEmitter, ViewChild, ElementRef } from '@angular/core';
-import { TradeDrawerService, NotificationService, StockDrawerObj, } from 'src/app/shared';
-import { Observable, Subscription } from 'rxjs';
+import { TradeDrawerService, NotificationService, StockDrawerObj, UserStore, UserDataStoreService, } from 'src/app/shared';
+import { BehaviorSubject, distinctUntilChanged, firstValueFrom, map, Observable, of, Subscription, switchMap, tap } from 'rxjs';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { environment } from 'environment';
+import { HttpClient } from '@angular/common/http';
+import { PortfolioService } from '../../services/portfolio.service';
+
 @Component({
   selector: 'app-trade-order-drawer',
   templateUrl: './trade-order-drawer.component.html',
   styleUrl: './trade-order-drawer.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
+
 export class TradeOrderDrawerComponent implements OnInit, OnChanges {
-
-
   values:any = {};
   //@Input() tradeOrder: any = {}
   localTradeObj:any = {};
@@ -23,8 +27,34 @@ export class TradeOrderDrawerComponent implements OnInit, OnChanges {
   public traderObj$!: Observable<StockDrawerObj>;
   public objSubscription!: Subscription;
 
-  constructor(private cdr: ChangeDetectorRef, private _tds:TradeDrawerService, 
-    private _notificationService: NotificationService) {
+  createOrderForm = new FormGroup({
+    portfolioId: new FormControl('', Validators.required),
+    userId: new FormControl('', [Validators.required]),
+    ticker: new FormControl(this.localTradeObj.symbol, [Validators.required]),
+    quantity: new FormControl('', [Validators.required]),
+    executionMode: new FormControl('SINGLE_EXCHANGE', [Validators.required]),
+    preferredExchangeSlug: new FormControl('', [Validators.required]),
+    price: new FormControl('', []),
+    side: new FormControl('', [Validators.required]),
+    type: new FormControl('', [Validators.required]),
+    splitEnabled: new FormControl(false)
+  });
+
+  userPortfolios = new BehaviorSubject<{id: number, name: string}[]> ([{
+    id: 1,
+    name: 'Default Portfolio'
+  }]);
+  userId = 0;
+
+  constructor(
+    private cdr: ChangeDetectorRef, 
+    private _tds:TradeDrawerService, 
+    private _notificationService: NotificationService,
+    private _http: HttpClient,
+    private fb: FormBuilder,
+    private _userDataStoreService: UserDataStoreService,
+    private _portfolioServices: PortfolioService,
+  ) {
     this.traderObj$ = this._tds.switchState$;
 
     this.objSubscription = this.traderObj$.subscribe((data: StockDrawerObj)=>{
@@ -38,10 +68,54 @@ export class TradeOrderDrawerComponent implements OnInit, OnChanges {
   }
 
   ngOnInit(): void {
-    //console.log(this.tradeOrder);
-    //this.localTradeObj = this.tradeOrder;
+      this.fetchPortfolios();
       this.cdr.detectChanges();
   }
+
+  public async fetchPortfolios(): Promise<void> {
+    this._userDataStoreService.userData.subscribe(async (data: UserStore | undefined) => {
+      const userId = data?.userId;
+      console.log("uid" + userId);
+      if (userId) {
+        this.userId = userId;
+        const portfolios = await firstValueFrom(this._portfolioServices.getPorfolios(userId));
+        this.userPortfolios.next(portfolios);
+        console.log(portfolios);
+      } else {
+        this.userPortfolios.next([]);
+        console.log([]);
+      }
+    });
+  }
+
+  buy(createOrderForm: FormGroup) {
+    createOrderForm.patchValue({ side: 'BUY' });
+    this.executeTrade(createOrderForm);
+  }
+
+  sell(createOrderForm: FormGroup) {
+    createOrderForm.patchValue({ side: 'SELL' });
+    this.executeTrade(createOrderForm);
+  }
+
+  executeTrade(createOrderForm: FormGroup): void {
+    if (!createOrderForm.valid) {
+      console.log(createOrderForm.value);
+      this._notificationService.showError('Provide the required information', 'Order Details Invalid')
+      return;
+    }
+
+    this._http.post(environment.ORDER_SERVICE_BASE_URL  + '/orders', createOrderForm.value ).subscribe(
+      (response) => {
+       this._notificationService.showSuccess('','Successfully placed order')
+      },
+      (error: any) => {
+        this._notificationService.showError('','Could not place order')
+        console.log(error);
+      }
+    );
+  }
+
 
   ngOnChanges(changes:any):void {
     //console.log("Chanages", changes);
