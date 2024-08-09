@@ -86,46 +86,47 @@ export class DashboardComponent implements OnInit, OnDestroy {
       symbol: 'AAPL',
       icon: './assets/media/svg/brand-logos/apple-black.svg',
       avgSell: 200.5,
-      avgBuy: 250.1,
+      percent: 25,
     },
     {
       name: 'Google',
       symbol: 'GOOGL',
       icon: './assets/media/svg/brand-logos/google-icon.svg',
       avgSell: 190,
-      avgBuy: 195,
+      percent: 1.5,
     },
     {
       name: 'Oracle',
       symbol: 'ORCL',
       icon: './assets/media/svg/brand-logos/oracle.svg',
       avgSell: 45.3,
-      avgBuy: 60.6,
+      percent: 0.6,
     },
   ];
 
   exchangeTwoStocks: Array<any> = [
     {
-      name: 'Microsoft',
-      symbol: 'MSFT',
-      icon: './assets/media/svg/brand-logos/microsoft-5.svg',
-      avgSell: 82,
-      avgBuy: 64,
+      name: 'NetFlix',
+      symbol: 'NFLX',
+      icon: './assets/media/svg/brand-logos/netflix.svg',
+      avgSell: 12,
+      percent: 10,
     },
     {
       name: 'Amazon',
       symbol: 'AMZN',
       icon: './assets/media/svg/brand-logos/amazon.svg',
       avgSell: 50,
-      avgBuy: 55,
+      percent: 5.5,
     },
     {
-      name: 'NetFlix',
-      symbol: 'NFLX',
-      icon: './assets/media/svg/brand-logos/netflix.svg',
-      avgSell: 12,
-      avgBuy: 10,
+      name: 'Microsoft',
+      symbol: 'MSFT',
+      icon: './assets/media/svg/brand-logos/microsoft-5.svg',
+      avgSell: 82,
+      percent: 6.4,
     },
+    
   ];
 
   exchangeOneMarketBrief: Array<any> = [];

@@ -1,9 +1,12 @@
 import { ChangeDetectorRef, ChangeDetectionStrategy, OnChanges, Component, OnInit, Input, EventEmitter, ViewChild, ElementRef } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { TradeDrawerService, NotificationService, StockDrawerObj, UserStore, UserDataStoreService} from 'src/app/shared';
+import { TradeDrawerService, OrderApiClientService, NotificationService, StockDrawerObj, UserStore, UserDataStoreService} from 'src/app/shared';
 import { PortfolioService } from '../../';
 import { HttpClient } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
+
+import { HttpEventType, HttpEvent, HttpParams } from "@angular/common/http";
+
 import { 
   BehaviorSubject, 
   distinctUntilChanged, 
@@ -32,6 +35,10 @@ export class TradeOrderDrawerComponent implements OnInit, OnChanges {
   public traderObj$!: Observable<StockDrawerObj>;
   public objSubscription!: Subscription;
 
+  public processing: boolean = false;
+  public hasError: boolean = false;
+  public errorMsg: string = "";
+
   createOrderForm = new FormGroup({
     portfolioId: new FormControl('', Validators.required),
     userId: new FormControl('', [Validators.required]),
@@ -59,6 +66,7 @@ export class TradeOrderDrawerComponent implements OnInit, OnChanges {
     private _notificationService: NotificationService,
     private _http: HttpClient,
     private fb: FormBuilder,
+    private _apiClientService: OrderApiClientService,
     private _userDataStoreService: UserDataStoreService,
     private _portfolioServices: PortfolioService,
   ) {
@@ -112,7 +120,7 @@ export class TradeOrderDrawerComponent implements OnInit, OnChanges {
     this.executeTrade(createOrderForm);
   }
 
-  executeTrade(createOrderForm: FormGroup): void {
+ /*  executeTrade(createOrderForm: FormGroup): void {
     console.log(this.localTradeObj);
     console.log(createOrderForm.value);
     if (!createOrderForm.valid) {
@@ -128,6 +136,49 @@ export class TradeOrderDrawerComponent implements OnInit, OnChanges {
       (error: any) => {
         this._notificationService.showError('','Could not place order')
         console.log(error);
+      }
+    );
+  } */
+
+  public async executeTrade(createOrderForm: FormGroup): Promise<void> {
+    this.hasError = false;
+    console.log(this.localTradeObj);
+    console.log(createOrderForm.value);
+    if (!createOrderForm.valid) {
+      console.log(createOrderForm.value);
+      //this._notificationService.showError('Provide the required information', 'Order Details Invalid')
+      this.hasError = true;
+      this.errorMsg = 'Order Details Invalid, Provide the required information';
+      return;
+    }
+    this.processing = true;
+    (await this._apiClientService.addApiService(`orders`,  createOrderForm.value)).subscribe(
+      (event: HttpEvent<any>): any => {
+        switch (event.type) {
+          case HttpEventType.Sent:
+            this.processing = true;
+            break;
+          case HttpEventType.Response:
+            this.processing = false;
+            let {status, data, message, errors} = event.body;
+            console.log({status, data, message, errors});
+            if(status == 200){
+              //this.closeModal();
+              this._notificationService.showSuccess('Successfully placed order', 'Success');
+            }else{
+              this.hasError = true;
+              this.errorMsg = message || 'something went wrong please contact Technical Support';
+              this.cdr.detectChanges();
+            }
+        }
+      },
+      (errorObj:any) => {
+        console.log("Error ", errorObj?.error?.message);
+        this.processing = false;
+        //const errorMsg = errorObj?.error?.Message;
+        this.hasError = true;
+        this.errorMsg = ` ${errorObj?.error?.message} ` || 'something went wrong please contact Technical Support';
+        this.cdr.detectChanges();
       }
     );
   }

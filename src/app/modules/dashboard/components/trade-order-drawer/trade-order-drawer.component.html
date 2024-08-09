@@ -34,6 +34,15 @@
         </div>
       </div>
     </div>
+      <!-- begin::Alert error-->
+      <ng-container *ngIf="hasError">
+        <div class="mb-lg-15 alert alert-danger">
+          <div class="alert-text font-weight-bold">
+            {{errorMsg}}
+          </div>
+        </div>
+      </ng-container>
+      <!-- end::Alert error-->
     <!-- Calculations -->
     <form [formGroup]="createOrderForm" (ngSubmit)=executeTrade(createOrderForm) class="px-7 py-5">
       <div class="mb-10">

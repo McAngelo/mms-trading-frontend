@@ -57,8 +57,8 @@
           <span class="text-muted fw-bold d-block fs-7">{{ stock.symbol }}</span>
         </div>
         <div class="right-align">
-          <span class="badge badge-light-success">+$ {{ stock.avgBuy }}</span> &nbsp;
-          <span class="badge badge-light-info">-$ {{ stock.avgSell}}</span> &nbsp;
+          <span class="badge badge-light-success">+$ {{ stock.avgSell }}</span> &nbsp;
+          <span class="badge badge-light-success">{{ stock.percent}}%</span> &nbsp;
           <div class="app-navbar-item ms-1 ms-lg-3" (click)="triggerDrawer(stock)">
             <div
               class="position-relative btn btn-icon btn-custom btn-icon-muted btn-active-light btn-active-color-primary w-35px h-35px w-md-40px h-md-40px">
