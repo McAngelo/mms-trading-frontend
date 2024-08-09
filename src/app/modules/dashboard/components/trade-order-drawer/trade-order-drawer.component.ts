@@ -45,15 +45,13 @@ export class TradeOrderDrawerComponent implements OnInit, OnChanges {
     splitEnabled: new FormControl(false)
   });
 
-  userPortfolios = new BehaviorSubject<{id: number, name: string}[]> ([{
-    id: 1,
-    name: 'Default Portfolio'
-  }]);
+  userPortfolios: any[] = [];
   userId = 0;
 
   public userObj$!: Observable<UserStore>;
   //public objSubscription!: Subscription;
   public userData?: UserStore;
+  public value: any;
 
   constructor(
     private cdr: ChangeDetectorRef, 
@@ -95,23 +93,11 @@ export class TradeOrderDrawerComponent implements OnInit, OnChanges {
       this.objSubscription = this.userObj$.subscribe(async (data: UserStore | undefined) => {
         this.userData = data;
 
-        const userId = data?.userId;
-      console.log("data" + data);
-      console.log("uid" + userId);
-      if (userId) {
-        this.userId = userId;
-        console.log(userId);
         this.createOrderForm.patchValue({
-          userId: userId.toString(),
+          userId: this.userData?.userId?.toString() || '0',
         });
-        const portfolios = this._portfolioServices.getPorfolios(userId);
-        console.log(portfolios);
-        //this.userPortfolios.next(portfolios);
-        console.log(portfolios);
-      } else {
-        this.userPortfolios.next([]);
-        console.log([]);
-      }
+
+        this.userPortfolios = this.userData?.portfolios || [];
         
       });
   }
