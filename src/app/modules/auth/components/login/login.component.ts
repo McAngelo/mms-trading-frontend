@@ -4,7 +4,7 @@ import { Subscription, Observable } from 'rxjs';
 import { first } from 'rxjs/operators';
 import { AuthService } from '../../services/auth.service';
 import { ActivatedRoute, Router } from '@angular/router';
-import { LoginRequest, User } from 'src/app/shared';
+import { OrderApiClientService, LoginRequest, User } from 'src/app/shared';
 
 @Component({
   selector: 'app-login',
@@ -22,12 +22,16 @@ export class LoginComponent implements OnInit, OnDestroy {
   returnUrl: string;
   isLoading$: Observable<boolean>;
 
+  public processing: boolean = false;
+  public errorMsg: string = "";
+
   // private fields
   private unsubscribe: Subscription[] = []; // Read more: => https://brianflove.com/2016/12/11/anguar-2-unsubscribe-observables/
 
   constructor(
     private fb: FormBuilder,
     private authService: AuthService,
+    
     private route: ActivatedRoute,
     private router: Router
   ) {
@@ -84,7 +88,10 @@ export class LoginComponent implements OnInit, OnDestroy {
       .login(loginReq)
       .pipe(first())
       .subscribe((user: User | undefined) => {
+        user?.id
         if (user) {
+          user.walletBalance 
+          
           this.router.navigate([this.returnUrl]);
         } else {
           this.hasError = true;
@@ -92,6 +99,8 @@ export class LoginComponent implements OnInit, OnDestroy {
       });
     this.unsubscribe.push(loginSubscr);
   }
+
+  
 
   ngOnDestroy() {
     this.unsubscribe.forEach((sb) => sb.unsubscribe());

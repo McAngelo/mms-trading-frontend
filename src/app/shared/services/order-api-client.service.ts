@@ -7,8 +7,9 @@ import { environment } from 'src/environments/environment';
 @Injectable({
   providedIn: 'root'
 })
-export class ApiClientService {
-  private baseUrl: string = environment._apiEndpoint;
+export class OrderApiClientService {
+
+  private baseUrl: string = environment.ORDER_SERVICE_BASE_URL;
   public headers: any = new HttpHeaders();
   public token: string = '';
 
@@ -125,5 +126,4 @@ export class ApiClientService {
     });
     return this._http.request(req);
   }
-
 }

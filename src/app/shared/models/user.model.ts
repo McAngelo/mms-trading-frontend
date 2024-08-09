@@ -51,13 +51,14 @@ export interface Wallet {
 
 export interface User {
   id: number;
+  userId?: number;
   fullName: string;
   email: string;
   accountLocked: boolean;
   enabled: boolean;
   roles: Role[];
-  portfolios: Portfolio[];
-  wallet: Wallet[];
+  portfolios: any[];
+  walletBalance?: number;
   availableStocks?: any;
   totalOrders?:any;
   createdDate: string;

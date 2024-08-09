@@ -6,7 +6,8 @@ import { AuthModel } from '../models/auth.model';
 import { AuthHTTPService } from './auth-http';
 import { environment } from 'src/environments/environment';
 import { Router } from '@angular/router';
-import { UserRegistrationModel, LoginRequest, User, ApiClientService, NotificationService, UserDataStoreService, UserStore } from 'src/app/shared';
+import { UserRegistrationModel, LoginRequest, User, OrderApiClientService,  UserDataStoreService, UserStore } from 'src/app/shared';
+import { HttpEventType, HttpEvent, HttpParams } from "@angular/common/http";
 
 export type UserType = User | undefined;
 
@@ -24,6 +25,9 @@ export class AuthService implements OnDestroy {
   currentUserSubject: BehaviorSubject<UserType>;
   isLoadingSubject: BehaviorSubject<boolean>;
 
+  public processing: boolean = false;
+  public errorMsg: string = "";
+
   get currentUserValue(): UserType {
     return this.currentUserSubject.value;
   }
@@ -35,6 +39,7 @@ export class AuthService implements OnDestroy {
   constructor(
     private authHttpService: AuthHTTPService,
     private router: Router,
+    private _apiClientService: OrderApiClientService,
     private userDataStoreService: UserDataStoreService
   ) {
     this.isLoadingSubject = new BehaviorSubject<boolean>(false);
@@ -86,6 +91,8 @@ export class AuthService implements OnDestroy {
       map((user: User | undefined) => {
         if (user) {
           this.userDataStoreService.create(user);
+          this.getWallet(user.userId!.toString(), user);
+          this.getPortfolios(user.userId!.toString(), user);
           this.currentUserSubject.next(user);
         } else {
           this.logout();
@@ -146,6 +153,58 @@ export class AuthService implements OnDestroy {
       console.error(error);
       return undefined;
     }
+  }
+
+  //walletBalance
+  public async getWallet(userId:string, user:User): Promise<void> {
+    this.processing = true;
+    (await this._apiClientService.readOneApiService(`wallet`,  userId)).subscribe(
+      (event: HttpEvent<any>): any => {
+        switch (event.type) {
+          case HttpEventType.Sent:
+            this.processing = true;
+            break;
+          case HttpEventType.Response:
+            this.processing = false;
+            let {status, data, message, error} = event.body;
+            console.log({status, data, message, error});
+            if(status == 200){
+                user.walletBalance = parseInt(data);
+                this.userDataStoreService.update("userData", user);
+              //this.getAllCompanies();
+            }else{
+              //this.hasError = true;
+              this.errorMsg = 'something went wrong please contact Technical Support';
+            }
+        }
+      }
+    );
+  }
+
+  //Portofolios
+  public async getPortfolios(userId:string, user:User): Promise<void> {
+    this.processing = true;
+    (await this._apiClientService.readOneApiService(`portfolios`,  userId)).subscribe(
+      (event: HttpEvent<any>): any => {
+        switch (event.type) {
+          case HttpEventType.Sent:
+            this.processing = true;
+            break;
+          case HttpEventType.Response:
+            this.processing = false;
+            let {status, data, message, error} = event.body;
+            console.log({status, data, message, error});
+            if(status == 200){
+                user.portfolios = data;
+                this.userDataStoreService.update("userData", user);
+              //this.getAllCompanies();
+            }else{
+              //this.hasError = true;
+              this.errorMsg = 'something went wrong please contact Technical Support';
+            }
+        }
+      }
+    );
   }
 
   ngOnDestroy() {

@@ -1,6 +1,6 @@
 import { Component, ViewChild, OnInit, ChangeDetectorRef } from '@angular/core';
 import { ModalConfig, ModalComponent } from '../../../../_metronic/partials';
-import { UserDataStoreService, UserStore, ApiClientService, NotificationService  } from 'src/app/shared';
+import { UserDataStoreService, UserStore, OrderApiClientService, NotificationService  } from 'src/app/shared';
 import { Observable, Subscription } from 'rxjs';
 import { HttpEventType, HttpEvent, HttpParams } from "@angular/common/http";
 
@@ -30,8 +30,8 @@ export class WalletComponent implements OnInit{
   public errorMsg: string = "";
 
   constructor(
-    cd: ChangeDetectorRef,
-    private _apiClientService: ApiClientService,
+    private _cdr: ChangeDetectorRef,
+    private _apiClientService: OrderApiClientService,
     private _notificationService: NotificationService,
     private _userDataStoreService: UserDataStoreService) {}
 
@@ -42,11 +42,10 @@ export class WalletComponent implements OnInit{
     this.objSubscription = this.userObj$.subscribe((data: UserStore | undefined) => {
       this.userData = data;
       console.log(this.userData);
-      this.walletBalance = (data?.wallet)? data.wallet[0]?.balance : 0 ;
-      this.walletId = (data?.wallet && data.wallet[0]?.id !== undefined) 
-                      ? data.wallet[0]?.id.toString() 
-                      : '0';
+      this.walletBalance = (data?.walletBalance)? data.walletBalance : 0 ;
+      this._cdr.detectChanges();
     });
+
   }
 
   receiveData(data: string){
@@ -57,12 +56,11 @@ export class WalletComponent implements OnInit{
   public async fundWallet(amount:string): Promise<void> {
     const fundData = {
       "balance": parseInt(amount),
-      "status": "ACTIVE",
-      "userId": this.userData?.userId
+      "userId": this.userData?.userId?.toString()
     };
     console.log(fundData);
     this.processing = true;
-    (await this._apiClientService.updateApiService(`wallet/update`, this.walletId, fundData)).subscribe(
+    (await this._apiClientService.addApiService(`wallet/credit/${this.userData?.userId}`,  fundData)).subscribe(
       (event: HttpEvent<any>): any => {
         switch (event.type) {
           case HttpEventType.Sent:
@@ -75,8 +73,8 @@ export class WalletComponent implements OnInit{
             if(status == 200){
               this.closeModal();
               this._notificationService.showSuccess('Wallet funded successfully', 'Success');
-              if (this.userData && this.userData.wallet && this.userData.wallet[0]) {
-                this.userData.wallet[0].balance = parseInt(amount);
+              if (this.userData) {
+                this.userData.walletBalance = (this.walletBalance || 0) + parseInt(amount);
                 this._userDataStoreService.update("userData", this.userData);
               }
               //this.getAllCompanies();

@@ -24,7 +24,7 @@ export class WalletSummaryComponent implements OnInit {
 
     this.objSubscription = this.userObj$.subscribe((data: UserStore | undefined) => {
       this.userData = data;
-      this.walletBalance = (data?.wallet)? data.wallet[0]?.balance : 0 ;
+      this.walletBalance = (data?.walletBalance)? data.walletBalance : 0 ;
       this.totalPortfolio = (data?.portfolios)? data.portfolios.length : 0;
       this.availableStocks = data?.availableStocks || 0;
       this.totalOrders = data?.totalOrders || 0;

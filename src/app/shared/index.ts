@@ -7,6 +7,7 @@ export * from './auth-guard/auth.guard';
 
 export * from './services/alert.service';
 export * from './services/api-client.service';
+export * from './services/order-api-client.service';
 export * from './services/authentication.service';
 export * from './services/auth.service';
 export * from './services/logger.service';

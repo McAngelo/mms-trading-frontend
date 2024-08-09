@@ -12,16 +12,6 @@ export interface RoleStore {
   lastModifiedDate?: string | null;
 }
 
-export interface PortfolioStore {
-  id?: number;
-  createdDate?: string;
-  lastModifiedDate?: string | null;
-  createdBy?: number;
-  lastModifiedBy?: number | null;
-  portfolioName?: string;
-  portfolioType?: string;
-  status?: string;
-}
 
 export interface WalletStore {
   id?: number;
@@ -40,8 +30,8 @@ export interface UserStore {
   accountLocked?: boolean;
   enabled?: boolean;
   roles?: RoleStore[];
-  portfolios?: PortfolioStore[];
-  wallet?: WalletStore[];
+  portfolios?: any[];
+  walletBalance?: number;
   availableStocks?: any;
   totalOrders?:any;
   createdDate?: string;

@@ -41,11 +41,11 @@ export class PortfolioDashboardComponent implements OnInit{
     this.objSubscription = this.userObj$.subscribe((data: UserStore | undefined) => {
       this.userData = data;
       console.log(this.userData);
-      this.walletBalance = (data?.wallet)? data.wallet[0]?.balance : 0 ;
+      this.walletBalance = (data?.walletBalance)? data.walletBalance : 0 ;
       //this.walletId = (data?.wallet)? data.wallet[0]?.id?.toString() : '0' ;
-      this.walletId = (data?.wallet && data.wallet[0]?.id !== undefined) 
+      /* this.walletId = (data?.wallet && data.wallet[0]?.id !== undefined) 
                       ? data.wallet[0]?.id.toString() 
-                      : '0';
+                      : '0'; */
       this.totalPortfolio = (data?.portfolios)? data.portfolios.length : 0;
       this.availableStocks = data?.availableStocks || 0;
       this.totalOrders = data?.totalOrders || 0;
@@ -78,8 +78,8 @@ export class PortfolioDashboardComponent implements OnInit{
             if(status == 200){
               this.closeModal();
               this._notificationService.showSuccess('Wallet funded successfully', 'Success');
-              if (this.userData && this.userData.wallet && this.userData.wallet[0]) {
-                this.userData.wallet[0].balance = parseInt(amount);
+              if (this.userData && this.userData.walletBalance && this.userData.walletBalance) {
+                this.userData.walletBalance = parseInt(amount);
                 this._userDataStoreService.update("userData", this.userData);
               }
               //this.getAllCompanies();
